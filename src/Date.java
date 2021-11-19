@@ -23,7 +23,7 @@ class Date {
 
         do {
            //ask the user for a date.
-           System.out.println("Enter a date (dd/mm/yyyy): ");
+           System.out.print("Enter a date (dd/mm/yyyy): ");
 
 
             String date = sc.nextLine();
@@ -34,7 +34,7 @@ class Date {
             //check if the array has 3 elements
             if (dateArray.length != 3) {
                 //check if the elements are integers
-                System.out.println("Por favor insere a data corretamente (dd/mm/yy).");
+                System.out.println("Please insert the data correctly (dd/mm/yy).");
                 continue;
             }
 
@@ -43,7 +43,7 @@ class Date {
                 m = Integer.parseInt(dateArray[1]);
                 y = Integer.parseInt(dateArray[2]);
             } catch (NumberFormatException e) {
-                System.out.println("Por favor, escreve números na data.");
+                System.out.println("Please, write numbers in the respective date.");
                 continue;
             }
 
@@ -68,7 +68,7 @@ class Date {
                         if (day <= 30) {
                             return true;
                         }
-                    } else { //its February
+                    } else { //it's February
 
                         //check for leap year
                         if (year % 4 == 0) {
@@ -85,7 +85,7 @@ class Date {
                 }
             }
         }
-        System.out.println("Data não existe.");
+        System.out.println("Data doesn't exist.");
         return false;
     }
 

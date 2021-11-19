@@ -1,13 +1,5 @@
 import java.util.Scanner;
 
-public class Main {
-    // Main method
-    public static void main(String[] args) {
-        //create a Customer object
-        Customer customer = new Customer();
-    }
-}
-
 /*
 The	application should manage customers, products, discounts, and orders. Customers	are	characterized by name, address,	email, telephonenumber, and date of birth.
 Products are described by name, identifier, price per unit	and	current	stock.
@@ -41,7 +33,6 @@ The application should allow the following operations:
     1)Login.
     2)Make an order.
     3)View previous orders
-
  */
 
 /*
@@ -51,3 +42,56 @@ After application first	run, all data must be saved	into object	files. These obj
 To simplify application	testing, it	should be possible to change the current date. The login is made by	the	email address.
  */
 
+
+public class Main {
+    // Main method
+    public static void main(String[] args) {
+        //Interface
+        Customers customers = new Customers();
+        MenuInterface menu = new MenuInterface();
+
+
+    }
+}
+
+class MenuInterface {
+    public MenuInterface() {
+        System.out.println("Welcome to the Java SuperMarket Chain!");
+        System.out.println("Please register or login to continue.");
+
+        Scanner input = new Scanner(System.in);
+        System.out.print(" 1 - Register\n 2 - Login\n 3 - Exit\nInput: ");
+        int choice = input.nextInt();
+        do {
+            switch (choice) {
+                case 1:
+                    register();
+                    break;
+                case 2:
+                    login();
+                    break;
+                case 3:
+                    System.out.println("Thank you for using the Java SuperMarket Chain!");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid input. Please try again.");
+                    break;
+            }
+        } while (choice>3 || choice<1);
+    }
+
+    public void login() {
+        System.out.print("Please login by using your email:");
+
+    }
+
+    public void register() {
+        System.out.println("Welcome! Please Register yourself:");
+        Customer client = new Customer();
+        System.out.println("Registration Complete!\n");
+
+        login();
+    }
+
+}

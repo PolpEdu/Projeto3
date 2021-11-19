@@ -3,10 +3,9 @@ import java.util.Scanner;
 public class Main {
     // Main method
     public static void main(String[] args) {
-
+        //create a Customer object
+        Customer customer = new Customer();
     }
-
-
 }
 
 /*
@@ -36,98 +35,19 @@ Furniture products weighing more than 15kg have a delivery cost of 10 Euros.
 This cost is applicable	to all Customers.
 
  */
-class Customer {
-    private String name;
-    private String address;
-    private String email;
-    private String phoneNumber;
-    private String dateOfBirth;
 
-    public Customer(String name, String address, String email, String phoneNumber, String dateOfBirth) {
-        this.name = name;
-        this.address = address;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.dateOfBirth = dateOfBirth;
-    }
+/*
+The application should allow the following operations:
+    1)Login.
+    2)Make an order.
+    3)View previous orders
 
-    public Customer() {
-        // ask for data to create a customer
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter customer name: ");
+ */
 
-        this.name = sc.nextLine();
-        System.out.println("Enter customer address: ");
-        this.address = sc.nextLine();
+/*
+Text files containing data for regular customers, frequent customers, products, and discounts (at least 5 items	from each category) should be provided.
+The	structure of these files should enable easy	editing and parsing.
+After application first	run, all data must be saved	into object	files. These object files should be loaded every time the application is run again.
+To simplify application	testing, it	should be possible to change the current date. The login is made by	the	email address.
+ */
 
-        System.out.println("Enter customer email: ");
-        this.email = sc.nextLine();
-
-        System.out.println("Enter customer phone number: ");
-        this.phoneNumber = sc.nextLine();
-
-        System.out.println("Enter customer date of birth: ");
-        this.dateOfBirth = sc.nextLine();
-
-        sc.close();
-    }
-}
-
-
-class Product {
-    private String name;
-    private String identifier;
-    private double pricePerUnit;
-    private int currentStock;
-
-    public Product(String name, String identifier, double pricePerUnit, int currentStock) {
-        this.name = name;
-        this.identifier = identifier;
-        this.pricePerUnit = pricePerUnit;
-        this.currentStock = currentStock;
-    }
-}
-
-class FoodProduct extends Product {
-    private int calories;
-    private int percentageOfFat;
-
-    public FoodProduct(String name, String identifier, double pricePerUnit, int currentStock, int calories, int percentageOfFat) {
-        super(name, identifier, pricePerUnit, currentStock);
-        this.calories = calories;
-        this.percentageOfFat = percentageOfFat;
-    }
-
-
-}
-
-class CleaningProduct extends Product {
-    private int toxicity;
-
-    public CleaningProduct(String name, String identifier, double pricePerUnit, int currentStock, int toxicity) {
-        super(name, identifier, pricePerUnit, currentStock);
-
-        if (toxicity < 0 || toxicity > 10) {
-            throw new IllegalArgumentException("Toxicity must be between 0 and 10");
-        }
-        this.toxicity = toxicity;
-    }
-}
-
-class FurnitureProduct extends Product {
-    private double weight;
-    private double height;
-    private double width;
-    private double depth;
-
-    public FurnitureProduct(String name, String identifier, double pricePerUnit, int currentStock, double weight, double height, double width) {
-        super(name, identifier, pricePerUnit, currentStock);
-        this.weight = weight;
-        this.height = height;
-        this.width = width;
-        this.depth = height * width * depth;
-    }
-
-
-
-}

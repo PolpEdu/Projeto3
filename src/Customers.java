@@ -9,19 +9,35 @@ class Customer{
     private long phoneNumber;
     private Date dateOfBirth;
 
-    public Customer(String name, String address, String email, long phoneNumber, Date dateOfBirth) {
+    public Customer(String name, String address, String email, String phoneNumber, Date dateOfBirth) {
         this.name = name;
         this.address = address;
+
+        if (!email.contains("@")) {
+            throw new IllegalArgumentException("Invalid email address.");
+        }
         this.email = email;
-        this.phoneNumber = phoneNumber;
+
+
+        if(!isValidPhoneNumber(phoneNumber)){
+            throw new IllegalArgumentException("Invalid phone number.");
+        }
+        try {
+            this.phoneNumber = Long.parseLong(phoneNumber);
+
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Couldn't parse phone number.");
+        }
+
         this.dateOfBirth = dateOfBirth;
 
-        this.storeCustomer(); //store the customer in the file
     }
 
     public Customer() {
         // ask for data to create a customer
         Scanner sc = new Scanner(System.in);
+
+
         System.out.print("Enter customer name: ");
         this.name = sc.nextLine();
 
@@ -30,11 +46,12 @@ class Customer{
         this.address = sc.nextLine();
 
 
+
         System.out.print("Enter customer email: ");
         String email = sc.nextLine();
 
 
-        while (!email.contains("@") || email.contains("\t")) {
+        while (!email.contains("@")) {
             System.out.print("Invalid email address. Please enter again: ");
             email = sc.nextLine();
 
@@ -56,24 +73,6 @@ class Customer{
 
         System.out.println("\nCustomer created successfully:\n" + this);
         sc.close();
-        this.storeCustomer(); //store the customer in the file
-    }
-
-    private void storeCustomer(){
-        File f = new File("customers.txt");
-        try {
-            FileWriter fw = new FileWriter(f);
-            BufferedWriter bw = new BufferedWriter(fw);
-
-            String clienttoWrite = this.formatStore();
-            bw.append(clienttoWrite);
-
-
-            bw.close();
-            fw.close();
-        } catch (IOException ex) {
-            System.out.println("Erro a escrever no ficheiro.");
-        }
     }
 
 
@@ -94,76 +93,18 @@ class Customer{
         return this.email;
     }
 
-    private String formatStore() {
-        return  name + "\t" + address +"\t" + email + "\t" + phoneNumber+ "\t" + dateOfBirth + "\n";
-    }
-
     @Override
     public String toString() {
-        return "Nome: " + name + "; Address: " + address +"; Email: " + email + "; Phone number: " + phoneNumber+ "; Date of birth: " + dateOfBirth + "\n";
+        return "Nome: " + name + "; Address: " + address +"; Email: " + email + "; Phone number: " + phoneNumber+ "; Date of birth: " + dateOfBirth + ";\n";
     }
 }
 
-class Customers {
+
+class Customers extends DataBase implements Serializable {
     private ArrayList<Customer> clients;
 
     public Customers() {
-        this.clients = loadCustomersFromtxt();
-    }
-
-    //load to Customers
-    private ArrayList<Customer> loadCustomersFromtxt() {
-        ArrayList<Customer> customersList = new ArrayList<>();
-
-        //load to Customers
-        File f = new File("customers.txt");
-        String line = "";
-        if(f.exists() && f.isFile()) {
-            try{
-                FileReader fr= new FileReader(f);
-                BufferedReader br= new BufferedReader(fr);
-
-                // for each line get a customer
-                while((line= br.readLine()) != null) {
-                    addCustomer(line);
-                }
-
-                br.close();
-                fr.close();
-            } catch(FileNotFoundException ex) {
-                System.out.println("Error while opening text file.");
-            } catch(IOException ex) {
-                System.out.println("Error while reading text file.");
-            }
-
-        } else{
-            System.out.println("Database doesn't exist... Creating new Database...");
-            try {
-                f.createNewFile();
-                System.out.println("File created.");
-            } catch (IOException e) {
-                System.out.println("Error while creating text file.");
-            }
-        }
-        return customersList;
-    }
-
-    private void addCustomer(String line) {
-        System.out.println(line);
-        String[] customer = line.split("\t");
-        String[] date = customer[4].split("/");
-        Date d = new Date(Integer.parseInt(date[0]),Integer.parseInt(date[1]),Integer.parseInt(date[2]));
-
-
-        System.out.println(customer[0] +"?"+customer[1]+"?" + customer[2]+"?" +  Long.parseLong(customer[3])+"?"+ d);
-
-        Customer c = new Customer(customer[0], customer[1], customer[2], Long.parseLong(customer[3]), d);
-
-        addCustomer(c);
-    }
-
-    private void addCustomer(Customer client) {
-        this.addCustomer(client);
+        this.clients = new ArrayList<>();
     }
 
     //testing purposes
@@ -173,13 +114,85 @@ class Customers {
         }
     }
 
-    private boolean validateClient(String email) {
-        for(Customer c : clients) {
-            if(c.getEmail().equals(email)) {
+    private void addCustomer(Customer c) {
+        if (!checkExists(c)){
+            this.clients.add(c);
+        } else{
+            System.out.println("Email already registered!");
+        }
+    }
+
+    private boolean checkExists(Customer c) {
+        this.clients = super.load();
+
+        String email = c.getEmail();
+        for(Customer i : clients) {
+            if(i.getEmail().equals(email)) {
                 return true;
             }
         }
         return false;
     }
 
+    //Print all clients
+    @Override
+    public String toString() {
+        String s = "";
+        for(Customer c : clients) {
+            s += c.toString()+"\n";
+        }
+        return s;
+    }
+}
+
+class DataBase {
+    private static final String FILE_NAME = "customers.obj";
+    private Customers customers;
+    private File f = new File(FILE_NAME);
+
+    //constructor
+    public DataBase() {
+
+        customers = load();
+    }
+    
+    
+    //load to Customers
+    private Customers load() {
+        Customers clients = null;
+        if(f.isFile()) {
+            try {
+                FileInputStream fis = new FileInputStream(f);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                clients = (Customers) ois.readObject();
+                System.out.println("Updated:");
+                System.out.println(clients);
+                ois.close();
+            } catch (FileNotFoundException ex) {
+                System.out.println("Error while opening object file.");
+            } catch (IOException ex) {
+                System.out.println("Error while reading object file. Probably due to it being corrupted.");
+            } catch (ClassNotFoundException ex) {
+                System.out.println("Error while converting object.");
+            }
+
+        } else{
+            System.out.println("Database is empty.\n");
+        }
+        return clients;
+    }
+
+    private void save(Customers customers) {
+        try {
+            FileOutputStream fos = new FileOutputStream(f);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(customers);
+            oos.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("Error while creating file.");
+        } catch (IOException ex) {
+            System.out.println("Error while writing to the text file.");
+        }
+    }
+    
 }

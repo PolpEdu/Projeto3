@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 /*
-The	application should manage customers, products, discounts, and orders. Customers	are	characterized by name, address,	email, telephonenumber, and date of birth.
+The	application should manage customers, products, discounts, and orders. Customers	are	characterized by name, address,	email, telephone number, and date of birth.
 Products are described by name, identifier, price per unit	and	current	stock.
 There are three product categories: food, cleaning, and	furniture.
 Food products are also characterized by	the	number of calories/100g, and the percentage of fat.
@@ -23,7 +23,7 @@ Each order can have several	products and in different quantities.
 For frequent customers,	delivery is	free for orders over 40 Euros. Below this value, delivery cost is 15 Euros.
 
 For other customers, the delivery cost is 20 Euros.
-Furniture products weighing more than 15kg have a delivery cost of 10 Euros.
+Furniture products weighing more than 15 kg have a delivery cost of 10 Euros.
 This cost is applicable	to all Customers.
 
  */
@@ -47,22 +47,25 @@ public class Main {
     // Main method
     public static void main(String[] args) {
         //Interface
-        Customers customers = new Customers();
-        MenuInterface menu = new MenuInterface();
+        DataBase db = new DataBase(); //loads customers from .obj file in to memory
+        AuthInterface menu = new AuthInterface();
 
 
     }
 }
 
-class MenuInterface {
-    public MenuInterface() {
+class AuthInterface extends Customers{
+
+    public AuthInterface() {
         System.out.println("Welcome to the Java SuperMarket Chain!");
         System.out.println("Please register or login to continue.");
 
         Scanner input = new Scanner(System.in);
         System.out.print(" 1 - Register\n 2 - Login\n 3 - Exit\nInput: ");
         int choice = input.nextInt();
+
         do {
+
             switch (choice) {
                 case 1:
                     register();
@@ -78,19 +81,23 @@ class MenuInterface {
                     System.out.println("Invalid input. Please try again.");
                     break;
             }
+
         } while (choice>3 || choice<1);
+
     }
 
-    public void login() {
+    private void login() {
         System.out.print("Please login by using your email:");
 
     }
 
-    public void register() {
+    private void register() {
         System.out.println("Welcome! Please Register yourself:");
         Customer client = new Customer();
-        System.out.println("Registration Complete!\n");
+        super.addCustomer(client);
 
+
+        System.out.println("Registration Complete!\n");
         login();
     }
 

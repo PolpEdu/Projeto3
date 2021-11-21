@@ -33,9 +33,8 @@ class Customer{
 
     }
 
-    public Customer() {
+    public Customer(Scanner sc) {
         // ask for data to create a customer
-        Scanner sc = new Scanner(System.in);
 
 
         System.out.print("Enter customer name: ");
@@ -72,9 +71,7 @@ class Customer{
         this.dateOfBirth = new Date(sc); //pass the scanner in the date constructor
 
         System.out.println("\nCustomer created successfully:\n" + this);
-        sc.close();
     }
-
 
     private boolean isValidPhoneNumber(String phoneNumber) {
         if (phoneNumber.length() != 9) {
@@ -93,46 +90,127 @@ class Customer{
         return this.email;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     @Override
     public String toString() {
-        return "Nome: " + name + "; Address: " + address +"; Email: " + email + "; Phone number: " + phoneNumber+ "; Date of birth: " + dateOfBirth + ";\n";
+        return "Name: " + name + "; Address: " + address +"; Email: " + email + "; Phone number: " + phoneNumber+ "; Date of birth: " + dateOfBirth + ";\n";
     }
 }
 
 
-class Customers extends DataBase implements Serializable {
+class Customers implements Serializable {
+    private static final String FILE_NAME = "customers.obj";
+    private File f = new File(FILE_NAME);
     private ArrayList<Customer> clients;
 
     public Customers() {
-        this.clients = new ArrayList<>();
+        System.out.println("Database Inicializada:");
+        clients = new ArrayList<>();
+        load();
     }
 
     //testing purposes
-    private void printClients() {
-        for(Customer c : clients) {
+    protected void printClients() {
+        System.out.println("\nCustomers:");
+        for(Customer c : this.clients) {
             System.out.println(c);
         }
     }
 
-    private void addCustomer(Customer c) {
+    protected void addCustomer(Customer c) {
+        if (!f.exists()){
+            System.out.println("File doesnt exist.");
+            return;
+        }
+
         if (!checkExists(c)){
-            this.clients.add(c);
+            this.clients.add(c); //update current clients
+            save(); //save to the db new clients
+
         } else{
             System.out.println("Email already registered!");
         }
     }
 
     private boolean checkExists(Customer c) {
-        this.clients = super.load();
+        //refresh db
+        load();
 
         String email = c.getEmail();
-        for(Customer i : clients) {
-            if(i.getEmail().equals(email)) {
-                return true;
+        if (this.clients != null) {
+            for(Customer i : this.clients) {
+                if(i.getEmail().equals(email)) {
+                    return true;
+                }
             }
         }
         return false;
     }
+
+    private ArrayList<Customer> getClients() {
+        return this.clients;
+    }
+
+    //load to Customers
+    private void load() {
+        if (!f.exists()){
+            System.out.println("File not found. Creating new file.");
+
+            try {
+                f.createNewFile();
+            }
+            catch (IOException e) {
+                System.out.println("Couldn't create file.");
+            }
+        }
+
+        try {
+            FileInputStream fis = new FileInputStream(f);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            Customers reloaded = (Customers) ois.readObject();
+            System.out.println(reloaded);
+
+            this.clients = reloaded.clients;
+
+            ois.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("Error while opening object file.");
+        } catch (IOException ex) {
+            System.out.println("Error while reading object file. Probably due to it being corrupted.");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Error while converting object.");
+        } /*else{
+            System.out.println("Database is empty.\n");
+        }*/
+    }
+
+    private void save() {
+        try {
+            FileOutputStream fos = new FileOutputStream(f);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(this);
+            System.out.println("Saved!");
+            oos.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("Error while creating file.");
+        } catch (IOException ex) {
+            System.out.println("Error while writing to the text file.");
+        }
+    }
+
+    protected Customer getCustomer(String email) {
+        for(Customer c : this.clients) {
+            if(c.getEmail().equals(email)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
 
     //Print all clients
     @Override
@@ -143,56 +221,4 @@ class Customers extends DataBase implements Serializable {
         }
         return s;
     }
-}
-
-class DataBase {
-    private static final String FILE_NAME = "customers.obj";
-    private Customers customers;
-    private File f = new File(FILE_NAME);
-
-    //constructor
-    public DataBase() {
-
-        customers = load();
-    }
-    
-    
-    //load to Customers
-    private Customers load() {
-        Customers clients = null;
-        if(f.isFile()) {
-            try {
-                FileInputStream fis = new FileInputStream(f);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                clients = (Customers) ois.readObject();
-                System.out.println("Updated:");
-                System.out.println(clients);
-                ois.close();
-            } catch (FileNotFoundException ex) {
-                System.out.println("Error while opening object file.");
-            } catch (IOException ex) {
-                System.out.println("Error while reading object file. Probably due to it being corrupted.");
-            } catch (ClassNotFoundException ex) {
-                System.out.println("Error while converting object.");
-            }
-
-        } else{
-            System.out.println("Database is empty.\n");
-        }
-        return clients;
-    }
-
-    private void save(Customers customers) {
-        try {
-            FileOutputStream fos = new FileOutputStream(f);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(customers);
-            oos.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println("Error while creating file.");
-        } catch (IOException ex) {
-            System.out.println("Error while writing to the text file.");
-        }
-    }
-    
 }

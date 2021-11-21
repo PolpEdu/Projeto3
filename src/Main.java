@@ -47,31 +47,34 @@ public class Main {
     // Main method
     public static void main(String[] args) {
         //Interface
-        DataBase db = new DataBase(); //loads customers from .obj file in to memory
-        AuthInterface menu = new AuthInterface();
-
+        Scanner sc = new Scanner(System.in);
+        Customers db = new Customers(); //loads customers from .obj file in to memory
+        AuthInterface menu = new AuthInterface(db,sc);
+        sc.close();
 
     }
 }
 
-class AuthInterface extends Customers{
+class AuthInterface{
+    private Customers db;
 
-    public AuthInterface() {
+    public AuthInterface(Customers db, Scanner sc) {
+        this.db = db;
+
         System.out.println("Welcome to the Java SuperMarket Chain!");
         System.out.println("Please register or login to continue.");
 
-        Scanner input = new Scanner(System.in);
         System.out.print(" 1 - Register\n 2 - Login\n 3 - Exit\nInput: ");
-        int choice = input.nextInt();
+        int choice = sc.nextInt();
 
         do {
 
             switch (choice) {
                 case 1:
-                    register();
+                    register(sc);
                     break;
                 case 2:
-                    login();
+                    login(sc);
                     break;
                 case 3:
                     System.out.println("Thank you for using the Java SuperMarket Chain!");
@@ -86,19 +89,65 @@ class AuthInterface extends Customers{
 
     }
 
-    private void login() {
+    private void login(Scanner sc) {
         System.out.print("Please login by using your email:");
 
+        String email = sc.nextLine();
+        Customer customer = db.getCustomer(email); //returns a customer by entering an email
+
+        while (customer == null) {
+            System.out.println("Email not found...\n" +
+                    "1 - Try again\n" +
+                    "2 - Register");
+            int choice = sc.nextInt();
+
+            if (choice == 1) {
+                email = sc.nextLine();
+                customer = db.getCustomer(email); //returns a customer by entering an email
+                LoggedIn loggedIn = new LoggedIn(customer, sc);
+
+            }
+            else if (choice == 2) {
+                register(sc);
+            }
+            else {
+                System.out.println("Invalid input. Please try again.");
+            }
+        }
     }
 
-    private void register() {
+    private void register(Scanner sc) {
         System.out.println("Welcome! Please Register yourself:");
-        Customer client = new Customer();
-        super.addCustomer(client);
+        Customer client = new Customer(sc);
+        db.addCustomer(client);
+
+        System.out.println("\n\n\nRegistration Complete!\n");
+        login(sc);
+    }
+
+}
 
 
-        System.out.println("Registration Complete!\n");
-        login();
+class LoggedIn{
+    private Customer customer;
+
+    public LoggedIn(Customer customer, Scanner sc) {
+        welcomemsg();
+        this.customer = customer;
+    }
+
+    private void welcomemsg() {
+        System.out.println("Welcome " + customer.getName() + "!");
+
+        System.out.println("What do you wish to do?");
+    }
+
+    private String getEmail() {
+        return customer.getEmail();
+    }
+
+    private String getName() {
+        return customer.getName();
     }
 
 }

@@ -1,0 +1,5 @@
+criar 1 so base de dados que guarda uma class geral que tem
+
+os clientes,
+os produtos,
+...

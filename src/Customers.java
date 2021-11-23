@@ -35,29 +35,29 @@ class Customer{
 
     public Customer(Scanner sc) {
         // ask for data to create a customer
+        System.out.println("Enter customer name: ");
+        String name = sc.nextLine();
+        if (name.length() != 0) {
+            this.name = name;
+        }
 
-
-        System.out.print("Enter customer name: ");
-        this.name = sc.nextLine();
-
-
-        System.out.print("Enter customer address: ");
+        System.out.println("Enter customer address: ");
         this.address = sc.nextLine();
 
 
 
-        System.out.print("Enter customer email: ");
+        System.out.println("Enter customer email: ");
         String email = sc.nextLine();
 
 
         while (!email.contains("@")) {
-            System.out.print("Invalid email address. Please enter again: ");
+            System.out.println("Invalid email address. Please enter again: ");
             email = sc.nextLine();
 
         }
         this.email = email;
 
-        System.out.print("Enter customer phone number: ");
+        System.out.println("Enter customer phone number: ");
         String phoneNumber = sc.nextLine();
 
         while (!isValidPhoneNumber(phoneNumber)) {
@@ -102,14 +102,21 @@ class Customer{
 
 
 class Customers implements Serializable {
-    private static final String FILE_NAME = "customers.obj";
-    private File f = new File(FILE_NAME);
     private ArrayList<Customer> clients;
+    
 
+    protected Customers getCustomers() {
+         loadcustomers();
+
+         return this.customers;
+    }
+    
     public Customers() {
         System.out.println("Database Inicializada:");
+        printClients();
+
         clients = new ArrayList<>();
-        load();
+
     }
 
     //testing purposes
@@ -120,25 +127,9 @@ class Customers implements Serializable {
         }
     }
 
-    protected void addCustomer(Customer c) {
-        if (!f.exists()){
-            System.out.println("File doesnt exist.");
-            return;
-        }
 
-        if (!checkExists(c)){
-            this.clients.add(c); //update current clients
-            save(); //save to the db new clients
-
-        } else{
-            System.out.println("Email already registered!");
-        }
-    }
 
     private boolean checkExists(Customer c) {
-        //refresh db
-        load();
-
         String email = c.getEmail();
         if (this.clients != null) {
             for(Customer i : this.clients) {
@@ -154,51 +145,12 @@ class Customers implements Serializable {
         return this.clients;
     }
 
-    //load to Customers
-    private void load() {
-        if (!f.exists()){
-            System.out.println("File not found. Creating new file.");
+    protected void addCustomer(Customer c) {
+        if (!checkExists(c)){
+            this.clients.add(c); //update current clients
 
-            try {
-                f.createNewFile();
-            }
-            catch (IOException e) {
-                System.out.println("Couldn't create file.");
-            }
-        }
-
-        try {
-            FileInputStream fis = new FileInputStream(f);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            Customers reloaded = (Customers) ois.readObject();
-            System.out.println(reloaded);
-
-            this.clients = reloaded.clients;
-
-            ois.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println("Error while opening object file.");
-        } catch (IOException ex) {
-            System.out.println("Error while reading object file. Probably due to it being corrupted.");
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Error while converting object.");
-        } /*else{
-            System.out.println("Database is empty.\n");
-        }*/
-    }
-
-    private void save() {
-        try {
-            FileOutputStream fos = new FileOutputStream(f);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-            oos.writeObject(this);
-            System.out.println("Saved!");
-            oos.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println("Error while creating file.");
-        } catch (IOException ex) {
-            System.out.println("Error while writing to the text file.");
+        } else{
+            System.out.println("Email already registered!");
         }
     }
 
@@ -222,3 +174,6 @@ class Customers implements Serializable {
         return s;
     }
 }
+
+
+

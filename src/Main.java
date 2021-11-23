@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import java.util.Scanner;
 
 /*
@@ -48,28 +49,40 @@ public class Main {
     public static void main(String[] args) {
         //Interface
         Scanner sc = new Scanner(System.in);
-        Customers db = new Customers(); //loads customers from .obj file in to memory
-        AuthInterface menu = new AuthInterface(db,sc);
+        AuthInterface menu = new AuthInterface(sc);
         sc.close();
 
     }
 }
 
-class AuthInterface{
-    private Customers db;
+class AuthInterface extends DataBase {
+    private Customers cs;
 
-    public AuthInterface(Customers db, Scanner sc) {
-        this.db = db;
+    public AuthInterface(Scanner sc) {
+        this.cs =  super.getCustomers();
+        if (this.cs == null) {
+            this.cs = new Customers();
+        }
 
         System.out.println("Welcome to the Java SuperMarket Chain!");
         System.out.println("Please register or login to continue.");
 
         System.out.print(" 1 - Register\n 2 - Login\n 3 - Exit\nInput: ");
-        int choice = sc.nextInt();
+        String choice;
+        int choiceInt;
 
         do {
+            choice = sc.nextLine(); //TODO: proteger isto
 
-            switch (choice) {
+            try {
+                choiceInt = Integer.parseInt(choice);
+            }
+            catch (NumberFormatException e) {
+                choiceInt = -1;
+            }
+
+            // System.out.println("Escolhido: " + choiceInt);
+            switch (choiceInt) {
                 case 1:
                     register(sc);
                     break;
@@ -85,7 +98,7 @@ class AuthInterface{
                     break;
             }
 
-        } while (choice>3 || choice<1);
+        } while ((choiceInt>4 || choiceInt<1));
 
     }
 
@@ -93,18 +106,24 @@ class AuthInterface{
         System.out.print("Please login by using your email:");
 
         String email = sc.nextLine();
-        Customer customer = db.getCustomer(email); //returns a customer by entering an email
+        Customer customer = this.cs.getCustomer(email); //returns a customer by entering an email
 
         while (customer == null) {
-            System.out.println("Email not found...\n" +
+            System.out.println(
+                    "Email not found...\n" +
                     "1 - Try again\n" +
                     "2 - Register");
             int choice = sc.nextInt();
 
             if (choice == 1) {
                 email = sc.nextLine();
-                customer = db.getCustomer(email); //returns a customer by entering an email
-                LoggedIn loggedIn = new LoggedIn(customer, sc);
+                customer = this.cs.getCustomer(email); //returns a customer by entering an email
+                if (customer == null) {
+                    System.out.println("Email not found...\nPlease try again.");
+                }
+                else {
+                    LoggedIn loggedIn = new LoggedIn(customer, sc);
+                }
 
             }
             else if (choice == 2) {
@@ -119,8 +138,8 @@ class AuthInterface{
     private void register(Scanner sc) {
         System.out.println("Welcome! Please Register yourself:");
         Customer client = new Customer(sc);
-        db.addCustomer(client);
-
+        this.cs.addCustomer(client);
+        super.savecustomers();
         System.out.println("\n\n\nRegistration Complete!\n");
         login(sc);
     }

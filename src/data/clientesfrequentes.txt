@@ -1,0 +1,5 @@
+Eduardo Nunes;Rua Aquilino Ribeiro;edujgnunes@gmail.com;918279498;21/1/2002
+Afonso Melo;Rua Afonso Melo;afonsomelo@gmail.com;969231112;9/9/2002
+Lucas Anjo;Rua da Esquerda;lucas012roblox@gmail.com;987654321;1/5/2003
+Vasco Gouveia;Rua da Direita;vascodoido@gmail.com;988765432;25/12/2002
+Lucas Anjo dois;Rua do Meio;lucas022roblox@gmail.com;923456789;1/1/1960

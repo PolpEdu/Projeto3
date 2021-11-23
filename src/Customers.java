@@ -102,13 +102,64 @@ class Customer{
 
 
 class Customers implements Serializable {
+    private static final String FILE_NAME = "customers.obj";
+    private File f = new File(FILE_NAME);
     private ArrayList<Customer> clients;
-    
 
-    protected Customers getCustomers() {
+    //load to Customers
+    private void loadcustomers() {
+        Customers lido = null;
+
+        if (!f.exists()){
+            System.out.println("File not found. Creating new file.");
+            try {
+                f.createNewFile();
+            }
+            catch (IOException e) {
+                System.out.println("Couldn't create file.");
+            }
+        }
+        if (f.isFile()) {
+            try {
+                FileInputStream fis = new FileInputStream(f);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                lido = (Customers) ois.readObject();
+
+                this.clients = lido.getClients();
+
+                ois.close();
+                fis.close();
+            } catch (FileNotFoundException ex) {
+                System.out.println("Error while opening object file.");
+            } catch (IOException ex) {
+                System.out.println("Error while reading object file. Probably due to it being corrupted.");
+            } catch (ClassNotFoundException ex) {
+                System.out.println("Error while converting object.");
+            }
+        }
+    }
+
+
+    private void savecustomers() {
+        try {
+            FileOutputStream fos = new FileOutputStream(f);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(this);
+            System.out.println("Saved!");
+            oos.close();
+            fos.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("Error while creating file.");
+        } catch (IOException ex) {
+            System.out.println("Error while writing to the text file.");
+        }
+    }
+
+    private ArrayList<Customer> getClients() {
          loadcustomers();
 
-         return this.customers;
+         return this.clients;
     }
     
     public Customers() {
@@ -141,9 +192,6 @@ class Customers implements Serializable {
         return false;
     }
 
-    private ArrayList<Customer> getClients() {
-        return this.clients;
-    }
 
     protected void addCustomer(Customer c) {
         if (!checkExists(c)){

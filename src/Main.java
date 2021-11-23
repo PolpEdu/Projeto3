@@ -55,7 +55,7 @@ public class Main {
     }
 }
 
-class AuthInterface extends DataBase {
+class AuthInterface {
     private Customers cs;
 
     public AuthInterface(Scanner sc) {

@@ -2,12 +2,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Customer{
+class Customer implements Serializable {
     private String name;
     private String address;
     private String email;
     private long phoneNumber;
     private Date dateOfBirth;
+    protected double transportValue=20;
 
     public Customer(String name, String address, String email, String phoneNumber, Date dateOfBirth) {
         this.name = name;
@@ -20,7 +21,7 @@ class Customer{
 
 
         if(!isValidPhoneNumber(phoneNumber)){
-            throw new IllegalArgumentException("Invalid phone number.");
+            throw new IllegalArgumentException("Invalid phone number. On client: "+this.name);
         }
         try {
             this.phoneNumber = Long.parseLong(phoneNumber);
@@ -86,6 +87,11 @@ class Customer{
         return true;
     }
 
+
+    public double getTransportValue(double orderValue) {
+        return this.transportValue;
+    }
+
     public String getEmail() {
         return this.email;
     }
@@ -96,34 +102,141 @@ class Customer{
 
     @Override
     public String toString() {
-        return "Name: " + name + "; Address: " + address +"; Email: " + email + "; Phone number: " + phoneNumber+ "; Date of birth: " + dateOfBirth + ";\n";
+        return "Name: " + name + "; Address: " + address +"; Email: " + email + "; Phone number: " + phoneNumber+ "; Date of birth: " + dateOfBirth;
     }
 }
+
+class RegularCustomer extends Customer implements Serializable {
+    public RegularCustomer(String name, String address, String email, String phoneNumber, Date dateOfBirth) {
+        super(name, address, email, phoneNumber, dateOfBirth);
+    }
+
+    @Override
+    public double getTransportValue(double orderValue) {
+       return 20;
+    }
+
+    @Override
+    public String toString() {
+        return "Regular customer: " + super.toString();
+    }
+}
+
+class FrequentCustomer extends Customer implements Serializable {
+    public FrequentCustomer(String name, String address, String email, String phoneNumber, Date dateOfBirth) {
+        super(name, address, email, phoneNumber, dateOfBirth);
+    }
+
+    private double calctransportValue(double orderValue) {
+        return orderValue > 40 ? 0.0 : 15.0;
+    }
+
+    @Override
+    public double getTransportValue(double orderValue) {
+        this.transportValue = calctransportValue(orderValue);
+        return this.transportValue;
+    }
+
+    @Override
+    public String toString() {
+        return "Frequent customer: " + super.toString();
+    }
+}
+
 
 
 class Customers implements Serializable {
     private static final String FILE_NAME = "customers.obj";
     private File f = new File(FILE_NAME);
+
+
+    private static final String INIT_TXT = "clients.txt";
+    private File t = new File(INIT_TXT);
+
     private ArrayList<Customer> clients;
 
-    //load to Customers
-    private void loadcustomers() {
-        Customers lido = null;
+    public Customers() {
+        clients = new ArrayList<>();
+        loadcustomers();
+    }
 
-        if (!f.exists()){
-            System.out.println("File not found. Creating new file.");
-            try {
-                f.createNewFile();
-            }
-            catch (IOException e) {
-                System.out.println("Couldn't create file.");
-            }
+    private void loadcustomers() {
+        if (f.exists() && f.isFile()) {
+            loadcustomersOBJ();
         }
+        else {
+            loadcustomerstxt();
+        }
+    }
+
+    //load to Customers
+    private void loadcustomerstxt() {
+        if(t.exists() && t.isFile()) {
+            try {
+                FileReader fr = new FileReader(t);
+                BufferedReader br = new BufferedReader(fr);
+
+                String line;
+                while((line= br.readLine()) != null) {
+                    try {
+                        String[] arrOfStr = line.split(";");
+
+                        String[] arrOfStr2 = arrOfStr[5].split("/"); //date
+
+                        Date date = new Date(Integer.parseInt(arrOfStr2[0]), Integer.parseInt(arrOfStr2[1]), Integer.parseInt(arrOfStr2[2]));
+
+                        Customer c;
+                        if (arrOfStr[0].equals("F")) {
+                            c = new FrequentCustomer(arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4], date);
+                        } else if (arrOfStr[0].equals("R")) {
+                            c = new RegularCustomer(arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4], date);
+                        }
+                        else {
+                            System.out.println("Invalid date format.\n Text file is corrupted (not in the correct format).");
+                            return;
+                        }
+
+
+                        try {
+                            this.addCustomer(c);
+                        } catch (Exception e) {
+                            System.out.println("Error while adding a customer: "+c+ "from the prebuilt text file.");
+                        }
+                    }
+                    catch (ArrayIndexOutOfBoundsException e){
+                        System.out.println("Invalid date format.\n Text file is corrupted (not in the correct format).");
+                        System.exit(0);
+                    }
+
+                }
+
+                System.out.println("Customers loaded successfully:");
+                savecustomersOBJ();
+                //this.printClients();
+
+                br.close();
+                fr.close();
+            } catch (FileNotFoundException ex) {
+                System.out.println("Error while opening object file.");
+            } catch (IOException ex) {
+                System.out.println("Error while reading object file. Probably due to it being corrupted.\n"+ex);
+            }
+
+        } else {
+            System.out.println("Error. No DataBase not found. Exiting...");
+            System.exit(1);
+        }
+
+
+
+    }
+
+    private void loadcustomersOBJ(){
         if (f.isFile()) {
             try {
                 FileInputStream fis = new FileInputStream(f);
                 ObjectInputStream ois = new ObjectInputStream(fis);
-                lido = (Customers) ois.readObject();
+                Customers lido = (Customers) ois.readObject();
 
                 this.clients = lido.getClients();
 
@@ -132,46 +245,39 @@ class Customers implements Serializable {
             } catch (FileNotFoundException ex) {
                 System.out.println("Error while opening object file.");
             } catch (IOException ex) {
-                System.out.println("Error while reading object file. Probably due to it being corrupted.");
+                System.out.println("Error while reading object file. Probably due to it being corrupted.\n"+ex);
             } catch (ClassNotFoundException ex) {
                 System.out.println("Error while converting object.");
             }
         }
     }
 
-
-    private void savecustomers() {
+    private void savecustomersOBJ() {
         try {
             FileOutputStream fos = new FileOutputStream(f);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-            oos.writeObject(this);
+            Customers c = this;
+            oos.writeObject(c);
             System.out.println("Saved!");
+
             oos.close();
             fos.close();
         } catch (FileNotFoundException ex) {
             System.out.println("Error while creating file.");
         } catch (IOException ex) {
-            System.out.println("Error while writing to the text file.");
+            System.out.println("Error while writing to the OBJ file.\n"+ex);
         }
     }
 
     private ArrayList<Customer> getClients() {
-         loadcustomers();
-
-         return this.clients;
+        //System.out.println(this.clients);
+        return this.clients;
     }
-    
-    public Customers() {
-        System.out.println("Database Inicializada:");
-        printClients();
 
-        clients = new ArrayList<>();
-
-    }
 
     //testing purposes
-    protected void printClients() {
+    private void printClients() {
         System.out.println("\nCustomers:");
         for(Customer c : this.clients) {
             System.out.println(c);
@@ -193,7 +299,7 @@ class Customers implements Serializable {
     }
 
 
-    protected void addCustomer(Customer c) {
+    private void addCustomer(Customer c) {
         if (!checkExists(c)){
             this.clients.add(c); //update current clients
 
@@ -222,6 +328,7 @@ class Customers implements Serializable {
         return s;
     }
 }
+
 
 
 

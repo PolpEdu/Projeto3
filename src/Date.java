@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.Scanner;
 
 //class that controls dates
-class Date {
+class Date implements Serializable {
     private int day;
     private int month;
     private int year;

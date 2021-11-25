@@ -10,6 +10,15 @@ class Product {
         this.pricePerUnit = pricePerUnit;
         this.currentStock = currentStock;
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getBarcode() {
+        return this.identifier;
+    }
+
 }
 
 class FoodProduct extends Product {
@@ -21,7 +30,6 @@ class FoodProduct extends Product {
         this.calories = calories;
         this.percentageOfFat = percentageOfFat;
     }
-
 
 }
 

@@ -146,11 +146,11 @@ class FrequentCustomer extends Customer implements Serializable {
 
 
 class Customers implements Serializable {
-    private static final String FILE_NAME = "customers.obj";
+    private final String FILE_NAME = "customers.obj";
     private File f = new File(FILE_NAME);
 
 
-    private static final String INIT_TXT = "clients.txt";
+    private final String INIT_TXT = "clients.txt";
     private File t = new File(INIT_TXT);
 
     private ArrayList<Customer> clients;
@@ -210,8 +210,8 @@ class Customers implements Serializable {
 
                 }
 
-                System.out.println("Customers loaded successfully:");
                 savecustomersOBJ();
+                //System.out.println("Customers loaded successfully:");
                 //this.printClients();
 
                 br.close();
@@ -226,9 +226,6 @@ class Customers implements Serializable {
             System.out.println("Error. No DataBase not found. Exiting...");
             System.exit(1);
         }
-
-
-
     }
 
     private void loadcustomersOBJ(){
@@ -239,7 +236,7 @@ class Customers implements Serializable {
                 Customers lido = (Customers) ois.readObject();
 
                 this.clients = lido.getClients();
-
+                System.out.println("Customers loaded successfully from OBJ file.");
                 ois.close();
                 fis.close();
             } catch (FileNotFoundException ex) {

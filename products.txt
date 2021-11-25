@@ -1,15 +1,15 @@
-L;568754456745;Esfergona super rápida;2.10;121
-L;555444332221;Cabo de Vassoura;129.0;81
-L;867584574471;Lixívia (não beber);29.0;122
-L;917293432721;Pano amarelo;1.0;500
-L;451643211283;Aspirador de ar;293.0;6
-A;912837171231;Massa preta;1.0;201
-A;891937276454;Cerveja Brasileira;1.0;4
-A;183859291818;Cacho Fresco;1.09;654874872382
-A;009919182726;Cerveja Portuguesa;0.80;999999999
-A;675048920101;Caixa de Pastel de Nata (20 .un);3.20;60
-M;919575673837;Cortina - Banheira (versão Faísca Mcqueen);20.0;1
-M;645929178372;Tapete - Porta (versão Faísca Mcqueen); 40.0;2
-M;123456789012;Cama - Casal (versão Faísca Mcqueen);100.0;1
-M;957361573271;Mesa com Desenhos (versão Faísca Mcqueen);3.50;60
-M;223333433333;Cadeira Gamer;253.2;3
+C;Esfergona super rápida;568754456745;2.10;121
+C;Cabo de Vassoura;555444332221;129.0;81
+C;Lixívia (não beber);867584574471;29.0;122
+C;Pano amarelo;917293432721;1.0;500
+C;Aspirador de ar;451643211283;293.0;6
+A;Massa preta;912837171231;1.0;201
+A;Cerveja Brasileira;891937276454;1.0;4
+A;Cacho Fresco;183859291818;1.09;654874872382
+A;Cerveja Portuguesa;009919182726;0.80;999999999
+A;Caixa de Pastel de Nata (caixa grande);675048920101;3.20;60
+F;Cortina para Banheira (versão Faísca Mcqueen);919575673837;20.0;1
+F;Tapete para Porta (versão Faísca Mcqueen);645929178372;40.0;2
+F;Cama de Casal (versão Faísca Mcqueen);123456789012;100.0;1
+F;Mesa com Desenhos (versão Faísca Mcqueen);957361573271;3.50;60
+F;Cadeira Gamer;223333433333;253.2;3

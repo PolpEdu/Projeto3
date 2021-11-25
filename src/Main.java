@@ -50,7 +50,9 @@ public class Main {
         //Interface
 
         Scanner sc = new Scanner(System.in);
+        Products products = new Products();
         AuthInterface menu = new AuthInterface(sc);
+
         sc.close();
 
     }
@@ -71,11 +73,10 @@ class AuthInterface {
 
         do {
             choice = sc.nextLine();
-
             try {
                 choiceInt = Integer.parseInt(choice);
-            }
-            catch (NumberFormatException e) {
+
+            } catch (NumberFormatException e) {
                 choiceInt = -1;
             }
 
@@ -105,56 +106,74 @@ class AuthInterface {
         while (customer == null) {
                 customer = this.cs.getCustomer(email); //returns a customer by entering an email
                 if (customer == null) {
-                    System.out.println("Email not found...\nPlease try again.");
+                    System.out.print("Email not found...\nPlease try again:");
                     email = sc.nextLine();
                 }
                 else {
                     LoggedIn loggedIn = new LoggedIn(customer, sc);
-
-
                 }
             }
         }
 
         /*
-
         private void register(Scanner sc) {
             System.out.println("Welcome! Please Register yourself:");
             Customer client = new Customer(sc);
             this.cs.addCustomer(client);
             System.out.println("\n\n\nRegistration Complete!\n");
             login(sc);
-        }
-
-        */
-    }
+        }        */
+}
 
 
 
 
 
 
-class LoggedIn{
+class LoggedIn {
     private Customer customer;
 
-    public LoggedIn(Customer customer, Scanner sc) {
-        System.out.println("Welcome " + customer.getName() + "!");
-        welcomemsg();
-        this.customer = customer;
+    public LoggedIn(Customer c, Scanner sc) {
+        this.customer = c;
+        this.welcomemsg(sc);
     }
 
-    private void welcomemsg() {
-        System.out.println("Welcome " + customer.getName() + "!");
-
+    private void welcomemsg(Scanner sc) {
+        System.out.println("Welcome " + this.customer.getName() + "!");
         System.out.println("What do you wish to do?");
+
+        System.out.print("1 - Make an order\n2 - View previous orders\n3 - Logout\nInput: ");
+        String choice;
+        int choiceInt;
+
+        do {
+            choice = sc.nextLine();
+            try {
+                choiceInt = Integer.parseInt(choice);
+
+            } catch (NumberFormatException e) {
+                choiceInt = -1;
+            }
+
+            switch (choiceInt) {
+                case 1:
+                    //makeOrder(sc);
+                    break;
+                case 2:
+                    //viewOrders();
+                    break;
+                case 3:
+                    break;
+
+                default:
+                    System.out.println("Invalid input. Please try again.");
+                    break;
+            }
+        } while ((choiceInt>3 || choiceInt<1));
     }
 
-    private String getEmail() {
-        return customer.getEmail();
-    }
-
-    private String getName() {
-        return customer.getName();
-    }
-
+    //private Order makeOrder(Scanner sc) {
+        //Product product = new Product();
+        //Order order = new Order(this.customer, );
+    //}
 }

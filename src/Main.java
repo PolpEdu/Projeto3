@@ -34,7 +34,7 @@ public class Main {
 
         Products products = new Products();
         Auth initauth = new Auth(sc);
-        new LoggedIn(initauth.getLoggedIn(), initauth.getLoggedDate(), sc);
+        new LoggedIn(initauth.getLoggedIn(), initauth.getLoggedDate(),products, sc);
 
     }
 }

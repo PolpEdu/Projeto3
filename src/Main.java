@@ -1,4 +1,3 @@
-import javax.xml.crypto.Data;
 import java.util.Scanner;
 
 /*
@@ -10,24 +9,6 @@ In cleaning	products.txt,the toxicity(scale	from 0 to 10) needs to be considered
 In	furniture, the weight and dimension (height*width*depth) need also to be considered.
  */
 
-/*
-To increase sales, the company makes temporary discounts.
-Each discount is associated	with a single product.
-There are two types	of discounts: the pay-three-take-four and the pay-less.
-
-In the pay-three-take-four type, customers pay three out of	four items.
-For example, if a customer buys 9 units	of a product, he/she will only pay 7.
-
-In the pay-less type, the first unit is	paid at 100%, being the	cost decreased by 5% for each additional unit, until a maximum discount	of 50% is reached.
-
-Each order can have several	products.txt and in different quantities.
-For frequent customers,	delivery is	free for orders over 40 Euros. Below this value, delivery cost is 15 Euros.
-
-For other customers, the delivery cost is 20 Euros.
-Furniture products.txt weighing more than 15 kg have a delivery cost of 10 Euros.
-This cost is applicable	to all Customers.
-
- */
 
 /*
 The application should allow the following operations:
@@ -50,22 +31,28 @@ public class Main {
         //Interface
 
         Scanner sc = new Scanner(System.in);
-        Products products = new Products();
-        AuthInterface menu = new AuthInterface(sc);
 
-        sc.close();
+        Products products = new Products();
+        Auth initauth = new Auth(sc);
+        new LoggedIn(initauth.getLoggedIn(), initauth.getLoggedDate(), sc);
 
     }
 }
 
-class AuthInterface {
+class Auth {
     private Customers cs;
+    private Customer loggedIn;
+    private Date now;
 
-    public AuthInterface(Scanner sc) {
-        cs = new Customers();
+    public Auth(Scanner sc) {
+        this.cs = new Customers();
+        welcome(sc);
+    }
 
+    //Welcome message which is used to redirect the user to the login page
+    private void welcome(Scanner sc) {
         System.out.println("Welcome to the Java SuperMarket Chain!");
-        System.out.println("Please register or login to continue.");
+        System.out.println("Please login to continue.");
 
         System.out.print("1 - Login\n2 - Exit\nInput: ");
         String choice;
@@ -80,15 +67,15 @@ class AuthInterface {
                 choiceInt = -1;
             }
 
-            // System.out.println("Escolhido: " + choiceInt);
+            // System.out.println("chosen: " + choiceInt);
             switch (choiceInt) {
                 case 1:
                     login(sc);
                     break;
                 case 2:
                     System.out.println("Thank you for using the Java SuperMarket Chain!");
+                    sc.close();
                     System.exit(0);
-                    break;
                 default:
                     System.out.println("Invalid input. Please try again.");
                     break;
@@ -98,31 +85,29 @@ class AuthInterface {
     }
 
     private void login(Scanner sc) {
-        System.out.print("Please login by entring your email: ");
+        System.out.print("Please login by entering your email: ");
 
         String email = sc.nextLine();
         Customer customer = this.cs.getCustomer(email); //returns a customer by entering an email
 
         while (customer == null) {
-                customer = this.cs.getCustomer(email); //returns a customer by entering an email
-                if (customer == null) {
-                    System.out.print("Email not found...\nPlease try again:");
-                    email = sc.nextLine();
-                }
-                else {
-                    LoggedIn loggedIn = new LoggedIn(customer, sc);
-                }
+            customer = this.cs.getCustomer(email); //returns a customer by entering an email
+            if (customer == null) {
+                System.out.print("Email not found...\nPlease try again:");
+                email = sc.nextLine();
             }
         }
+        this.loggedIn = customer;
+        this.now = new Date(27,12,2020);
+    }
 
-        /*
-        private void register(Scanner sc) {
-            System.out.println("Welcome! Please Register yourself:");
-            Customer client = new Customer(sc);
-            this.cs.addCustomer(client);
-            System.out.println("\n\n\nRegistration Complete!\n");
-            login(sc);
-        }        */
+    public Customer getLoggedIn(){
+        return this.loggedIn;
+    }
+
+    public Date getLoggedDate(){
+        return this.now;
+    }
 }
 
 
@@ -132,21 +117,27 @@ class AuthInterface {
 
 class LoggedIn {
     private Customer customer;
+    private Orders orders;
+    private Products availableProducts;
+    private Date loggedDate;
 
-    public LoggedIn(Customer c, Scanner sc) {
+    public LoggedIn(Customer c, Date logged,Products ap, Scanner sc) {
         this.customer = c;
-        this.welcomemsg(sc);
-    }
+        this.loggedDate = logged;
+        this.availableProducts = ap;
+        this.orders = new Orders(customer);
 
-    private void welcomemsg(Scanner sc) {
         System.out.println("Welcome " + this.customer.getName() + "!");
         System.out.println("What do you wish to do?");
+        this.menu(sc);
+    }
 
+    private void menu(Scanner sc) {
         System.out.print("1 - Make an order\n2 - View previous orders\n3 - Logout\nInput: ");
         String choice;
         int choiceInt;
 
-        do {
+        while (true) {
             choice = sc.nextLine();
             try {
                 choiceInt = Integer.parseInt(choice);
@@ -157,23 +148,43 @@ class LoggedIn {
 
             switch (choiceInt) {
                 case 1:
-                    //makeOrder(sc);
+                    makeOrder(sc);
                     break;
                 case 2:
-                    //viewOrders();
+                    viewOrders();
                     break;
                 case 3:
-                    break;
+                    System.out.println("Thank you for using the Java SuperMarket Chain!");
+                    return;
 
                 default:
                     System.out.println("Invalid input. Please try again.");
                     break;
             }
-        } while ((choiceInt>3 || choiceInt<1));
+        }
     }
 
-    //private Order makeOrder(Scanner sc) {
-        //Product product = new Product();
-        //Order order = new Order(this.customer, );
-    //}
+    private void makeOrder(Scanner sc) {
+        System.out.println("Please enter the products you wish to order:");
+
+        int len = this.availableProducts.getProductslen();
+
+        do {
+            //chose a product
+            availableProducts.printProductsSelection();
+            System.out.print("Input: ");
+
+            String choice;
+            choice = sc.nextLine();
+
+
+        } while (true);
+
+    }
+
+    private void viewOrders() {
+        System.out.println("Previous orders for the customer "+this.customer.getName()+":");
+        System.out.println(this.orders);
+    }
+
 }

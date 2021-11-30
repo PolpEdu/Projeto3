@@ -235,6 +235,7 @@ class LoggedIn {
             System.out.println("No previous orders.");
         } else {
             System.out.println("Previous orders for the customer "+this.customer.getName()+":");
+            //still need to load order from obj
             System.out.println(this.customer.getOrders());
         }
     }

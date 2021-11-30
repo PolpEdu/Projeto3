@@ -19,7 +19,7 @@ class Products implements Serializable {
 
     private void loadProducts() {
         if (f.exists() && f.isFile()) {
-            loadcustomersOBJ();
+            loadProductsOBJ();
         }
         else {
             loadProductstxt();
@@ -36,7 +36,7 @@ class Products implements Serializable {
     }
 
 
-    private void loadcustomersOBJ(){
+    private void loadProductsOBJ(){
         if (f.isFile()) {
             try {
                 FileInputStream fis = new FileInputStream(f);
@@ -170,10 +170,24 @@ class Products implements Serializable {
 
     public void printProductsSelection() {
         System.out.println("\nProducts:");
-        int i =0;
+        int i =1;
         for(Product p : this.products) {
-            System.out.println(i+". -"+p);
+            System.out.println(i+" - "+p.getName()+ ", Preço: "+p.getPrice()+"€ ");
+            i++;
         }
+    }
+
+    public Product getProduct(int nr) {
+        System.out.print("\nChosen Product: ");
+        int i =1;
+        for(Product p : this.products) {
+            if(i==nr) {
+                System.out.println(p.getName()+ ", Preço: "+p.getPrice()+"€ ");
+                return p;
+            }
+            i++;
+        }
+        return null;
     }
 
 

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
@@ -24,16 +25,21 @@ After application first	run, all data must be saved	into object	files. These obj
 To simplify application	testing, it	should be possible to change the current date. The login is made by	the	email address.
  */
 
-
+/**
+ * Main class that runs the application and initializes the default objects
+ * Such as menus, customers, products, discounts, and orders.
+ * @author Eduardo Nunes
+ */
 public class Main {
-    // Main method
+    /**
+     * Application starts here
+     * @param args given in the command line
+     */
     public static void main(String[] args) {
-        //Interface
 
         Scanner sc = new Scanner(System.in);
-
         Products products = new Products();
-        Auth initauth = new Auth(sc);
+        Auth initauth = new Auth(sc);  //Interface for login
         new LoggedIn(initauth.getLoggedIn(), initauth.getLoggedDate(),products, sc);
 
     }
@@ -44,12 +50,29 @@ class Auth {
     private Customer loggedIn;
     private Date now;
 
+    /**
+     * Constructor for the Auth class that initializes the customers and prints the Authentication menu
+     * @param sc Scanner object to read inputs
+     *
+     *
+     */
     public Auth(Scanner sc) {
         this.cs = new Customers();
         welcome(sc);
     }
 
-    //Welcome message which is used to redirect the user to the login page
+    /**
+     * Method that welcomes the user and asks for login
+     *
+     * In this method you can ask:
+     *
+     * <ul>
+     *     <li>If the user wants to create a new account</li>
+     *     <li>If the user wants to exit</li>
+     * </ul>
+     *
+     * @param sc Scanner object to read inputs
+     */
     private void welcome(Scanner sc) {
         System.out.println("Welcome to the Java SuperMarket Chain!");
         System.out.println("Please login to continue.");
@@ -84,6 +107,12 @@ class Auth {
         } while ((choiceInt>3 || choiceInt<1));
     }
 
+    /**
+     * Method that asks for login. If the login was successful, the loggedIn variable
+     * is set to the customer and the current date is set to the date loggedIn.
+     *
+     * @param sc Scanner object to read inputs
+     */
     private void login(Scanner sc) {
         System.out.print("Please login by entering your email: ");
 
@@ -100,7 +129,10 @@ class Auth {
         this.loggedIn = customer;
         this.now = new Date(27,12,2020);
     }
-
+    /**
+     * Method that returns the loggedIn variable
+     * @return loggedIn
+     */
     public Customer getLoggedIn(){
         return this.loggedIn;
     }
@@ -111,13 +143,11 @@ class Auth {
 }
 
 
-
-
-
-
+/**
+ * Class that represents a customer
+ */
 class LoggedIn {
     private Customer customer;
-    private Orders orders;
     private Products availableProducts;
     private Date loggedDate;
 
@@ -125,7 +155,6 @@ class LoggedIn {
         this.customer = c;
         this.loggedDate = logged;
         this.availableProducts = ap;
-        this.orders = new Orders(customer);
 
         System.out.println("Welcome " + this.customer.getName() + "!");
         System.out.println("What do you wish to do?");
@@ -133,17 +162,17 @@ class LoggedIn {
     }
 
     private void menu(Scanner sc) {
-        System.out.print("1 - Make an order\n2 - View previous orders\n3 - Logout\nInput: ");
         String choice;
         int choiceInt;
 
         while (true) {
+            System.out.print("1 - Make an order\n2 - View previous orders\n3 - Logout\nInput: ");
             choice = sc.nextLine();
             try {
                 choiceInt = Integer.parseInt(choice);
 
             } catch (NumberFormatException e) {
-                choiceInt = -1;
+                continue;
             }
 
             switch (choiceInt) {
@@ -166,25 +195,48 @@ class LoggedIn {
 
     private void makeOrder(Scanner sc) {
         System.out.println("Please enter the products you wish to order:");
+        int choiceInt;
+        String choice;
+        ArrayList<Product> carrinho = new ArrayList<>();
 
-        int len = this.availableProducts.getProductslen();
 
-        do {
+        while(true) {
             //chose a product
             availableProducts.printProductsSelection();
             System.out.print("Input: ");
 
-            String choice;
+
             choice = sc.nextLine();
+            try {
+                choiceInt = Integer.parseInt(choice);
+            } catch (NumberFormatException e) {
+                continue;
+            }
 
-
-        } while (true);
-
+            Product pchosen = availableProducts.getProduct(choiceInt);
+            if (pchosen == null) {
+                System.out.println("Invalid input. Please try again.");
+            }
+            else {
+                carrinho.add(pchosen);
+                System.out.println("Do you want to keep ordering? (y)");
+                choice = sc.nextLine();
+                if (!choice.equals("y")) {
+                    Order i = new Order(carrinho, loggedDate);
+                    this.customer.appendOrders(i);
+                    break;
+                }
+            }
+        }
     }
 
     private void viewOrders() {
-        System.out.println("Previous orders for the customer "+this.customer.getName()+":");
-        System.out.println(this.orders);
+        if (this.customer.getOrders() == null) {
+            System.out.println("No previous orders.");
+        } else {
+            System.out.println("Previous orders for the customer "+this.customer.getName()+":");
+            System.out.println(this.customer.getOrders());
+        }
     }
 
 }

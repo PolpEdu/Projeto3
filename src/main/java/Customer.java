@@ -7,6 +7,7 @@ class Customer implements Serializable {
     private String email;
     private long phoneNumber;
     private Date dateOfBirth;
+    private Orders orders;
     protected double transportValue=20;
 
     public Customer(String name, String address, String email, String phoneNumber, Date dateOfBirth) {
@@ -31,6 +32,7 @@ class Customer implements Serializable {
 
         this.dateOfBirth = dateOfBirth;
 
+        this.orders = new Orders();
     }
 
     public Customer(Scanner sc) {
@@ -86,6 +88,13 @@ class Customer implements Serializable {
         return true;
     }
 
+    public void appendOrders(Order order) {
+        this.orders.addOrder(order);
+    }
+
+    public Orders getOrders() {
+        return this.orders;
+    }
 
     public double getTransportValue(double orderValue) {
         return this.transportValue;
@@ -101,7 +110,8 @@ class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "Name: " + name + "; Address: " + address +"; Email: " + email + "; Phone number: " + phoneNumber+ "; Date of birth: " + dateOfBirth;
+        return "Name: " + name + "; Address: " + address +"; Email: " + email + "; Phone number: " + phoneNumber+ "; Date of birth: " + dateOfBirth+"\n" +
+                "Orders: " + orders;
     }
 }
 

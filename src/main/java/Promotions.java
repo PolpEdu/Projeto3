@@ -15,11 +15,6 @@ For other customers, the delivery cost is 20 Euros.
 Furniture products.txt weighing more than 15 kg have a delivery cost of 10 Euros.
 This cost is applicable	to all Customers.
  */
-class Promotion {
-
-
-
-}
 
 class PTTF extends Promotion {
 

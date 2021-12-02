@@ -220,8 +220,6 @@ class LoggedIn{
                 //System.out.println(carrinho);
                 this.availableProducts.removeProducts(pchosen,1);
 
-
-
                 System.out.println("Do you want to keep ordering? (y)");
                 choice = sc.nextLine();
                 if (!choice.equals("y")) {

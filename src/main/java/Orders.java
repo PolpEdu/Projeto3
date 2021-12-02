@@ -79,6 +79,9 @@ class Order implements Serializable {
         return price;
     }
 
+    public int size() {
+        return this.chosenProducts.size();
+    }
 
     public Date getDate() {
         return this.orderDate;
@@ -98,6 +101,6 @@ class Order implements Serializable {
         for (Product p : chosenProducts) {
             result += p.getName() + ", " + p.getPrice() + " euro\n";
         }
-        return result + "Total price: " + totalprice +"  euro\n";
+        return result + "Total price: " + totalprice +" euro\n";
     }
 }

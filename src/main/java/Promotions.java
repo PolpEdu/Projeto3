@@ -19,9 +19,44 @@ This cost is applicable	to all Customers.
 
 class PTTF extends Promotion {
 
+    public PTTF(Product product, int timesbought) {
+        super(product, timesbought);
+        this.price2pay = getPrice(timesbought, product.getPrice());
+    }
+
+    private double getPrice(int timesbought, double pprice) {
+
+        int vezes = Math.floorDiv(timesbought ,4);
+        int resto = timesbought % 4;
+
+        return vezes * 3 * pprice+ resto * pprice;
+    }
 }
 
 class PL extends Promotion {
+
+    public PL(Product product, int timesbought) {
+        super(product, timesbought);
+        this.price2pay = getPrice(timesbought, product.getPrice());
+    }
+
+
+    private double getPrice(int timesbought, double pprice) {
+        int vezes = timesbought;
+        double discount = 1;
+
+
+        double total = pprice * discount;
+        vezes--;
+        while (vezes > 0) {
+            if (discount > 0.5) {
+                discount -= 0.05;
+            }
+            total += pprice * discount;
+            vezes--;
+        }
+        return total;
+    }
 
 }
 

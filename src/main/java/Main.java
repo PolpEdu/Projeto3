@@ -175,7 +175,6 @@ class LoggedIn{
                     Order Ords = makeOrder(sc); //returns a customer with orders made.
 
                     //TODO: Falta tirar dos produtos disponiveis
-                    this.availableProducts.removeProducts(Ords.getProducts()); //acho que dá
                     this.customer.appendOrders(Ords);
                     break;
                 case 2:
@@ -218,10 +217,16 @@ class LoggedIn{
             }
             else {
                 carrinho.add(pchosen);
+                //System.out.println(carrinho);
+                this.availableProducts.removeProducts(pchosen,1);
+
+
+
                 System.out.println("Do you want to keep ordering? (y)");
                 choice = sc.nextLine();
                 if (!choice.equals("y")) {
                     i = new Order(carrinho, loggedDate);
+
                     break;
                 }
             }

@@ -13,6 +13,10 @@ class Product implements Serializable {
         this.currentStock = currentStock;
     }
 
+    public void removeun(int nr) {
+        this.currentStock -= nr;
+    }
+
     public String getName() {
         return this.name;
     }

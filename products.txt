@@ -1,5 +1,5 @@
 C;Esfergona super rápida;568754456745;2.10;121;6
-C;Cabo de Vassoura;555444332221;129.0;81;0
+C;Cabo de Vassoura;555444332221;129.0;2;0
 C;Lixívia (não beber);867584574471;29.0;122;10
 C;Pano amarelo;917293432721;1.0;500;0
 C;Aspirador de ar;451643211283;293.0;6;8

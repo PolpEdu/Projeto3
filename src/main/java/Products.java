@@ -35,11 +35,12 @@ class Products implements Serializable {
         this.products.add(product);
     }
 
-    public void removeProducts(ArrayList<Product> products) {
-        for (Product p : products) {
+    public void removeProducts(Product p, int nr) {
+        p.removeun(nr);
+
+        if(p.getCurrentStock()==0) {
             this.products.remove(p);
         }
-        saveproductsOBJ();
     }
 
 
@@ -176,16 +177,12 @@ class Products implements Serializable {
         }
     }
 
-    public int getProductslen(){
-        return products.size();
-    }
-
 
     public void printProductsSelection() {
         System.out.println("\nProducts:");
         int i =1;
         for(Product p : this.products) {
-            System.out.println(i+" - "+p.getName()+ ", Preço: "+p.getPrice()+"€ ");
+            System.out.println(i+" - "+p.getName()+ ", Preço: "+p.getPrice()+"€ - un:"+p.getCurrentStock());
             i++;
         }
     }

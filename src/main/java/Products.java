@@ -1,3 +1,5 @@
+package main.java;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -41,6 +43,7 @@ class Products implements Serializable {
         if(p.getCurrentStock()==0) {
             this.products.remove(p);
         }
+        saveproductsOBJ();
     }
 
 
@@ -61,7 +64,7 @@ class Products implements Serializable {
             } catch (IOException ex) {
                 System.out.println("Error while reading object file. Probably due to it being corrupted.\n"+ex);
             } catch (ClassNotFoundException ex) {
-                System.out.println("Error while converting object.");
+                System.out.println("Error while converting object.\n"+ex);
             }
         }
     }
@@ -182,7 +185,7 @@ class Products implements Serializable {
         System.out.println("\nProducts:");
         int i =1;
         for(Product p : this.products) {
-            System.out.println(i+" - "+p.getName()+ ", Preço: "+p.getPrice()+"€ - un:"+p.getCurrentStock());
+            System.out.println(i+" - "+p.getName()+ ", Preço: "+p.getPrice()+" euro - un:"+p.getCurrentStock());
             i++;
         }
     }
@@ -192,7 +195,7 @@ class Products implements Serializable {
         int i =1;
         for(Product p : this.products) {
             if(i==nr) {
-                System.out.println(p.getName()+ ", Preço: "+p.getPrice()+"€ ");
+                System.out.println(p.getName()+ ", Preço: "+p.getPrice()+" euro ");
                 return p;
             }
             i++;

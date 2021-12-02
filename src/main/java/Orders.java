@@ -1,3 +1,5 @@
+package main.java;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -94,8 +96,8 @@ class Order implements Serializable {
         String result = "";
 
         for (Product p : chosenProducts) {
-            result += p.getName() + ", " + p.getPrice() + ": €\n";
+            result += p.getName() + ", " + p.getPrice() + " euro\n";
         }
-        return result + "Total price: " + totalprice +" €\n";
+        return result + "Total price: " + totalprice +"  euro\n";
     }
 }

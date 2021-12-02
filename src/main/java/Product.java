@@ -1,3 +1,5 @@
+package main.java;
+
 import java.io.Serializable;
 
 class Product implements Serializable {
@@ -50,7 +52,7 @@ class FoodProduct extends Product implements Serializable{
 
     // Return tostring methods
     public String toString() {
-        return "FoodProduct: " + this.getName() + " id:" + this.getBarcode() + " " + this.getPrice() + "€ " + this.getCurrentStock() + "un. " + this.calories + "/100g " + this.percentageOfFat+"%";
+        return "FoodProduct: " + this.getName() + " id:" + this.getBarcode() + " " + this.getPrice() + " euro " + this.getCurrentStock() + "un. " + this.calories + "/100g " + this.percentageOfFat+"%";
     }
 
 }
@@ -68,7 +70,7 @@ class CleaningProduct extends Product implements Serializable {
     }
 
     public String toString() {
-        return "CleaningProduct: " + this.getName() + " id:" + this.getBarcode() + " " + this.getPrice() + "€ " + this.getCurrentStock() + "un. " + this.toxicity;
+        return "CleaningProduct: " + this.getName() + " id:" + this.getBarcode() + " " + this.getPrice() + " euro " + this.getCurrentStock() + "un. " + this.toxicity;
     }
 }
 
@@ -89,7 +91,7 @@ class FurnitureProduct extends Product implements Serializable {
     }
 
     public String toString() {
-        return "FurnitureProduct: " + this.getName() + " id:" + this.getBarcode() + " " + this.getPrice() + "€ " + this.getCurrentStock() + "un. " + this.weight + "kg " + this.height + "cm " + this.width + "cm " + this.depth + "cm " + this.dimension+"cm^3";
+        return "FurnitureProduct: " + this.getName() + " id:" + this.getBarcode() + " " + this.getPrice() + " euro " + this.getCurrentStock() + "un. " + this.weight + "kg " + this.height + "cm " + this.width + "cm " + this.depth + "cm " + this.dimension+"cm^3";
     }
 
 }

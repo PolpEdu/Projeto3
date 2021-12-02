@@ -1,3 +1,4 @@
+package main.java;
 /*
 To increase sales, the company makes temporary discounts.
 Each discount is associated	with a single product.

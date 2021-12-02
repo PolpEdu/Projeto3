@@ -1,3 +1,5 @@
+package main.java;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -38,10 +40,10 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        Products products = new Products();
         Date now = new Date(2, 12, 2019);
         while (true) {
-            Auth initauth = new Auth(sc,products,now);  //Interface for login
+            Products products = new Products();
+            new Auth(sc,products,now);  //Interface for login
         }
 
     }
@@ -173,8 +175,6 @@ class LoggedIn{
             switch (choiceInt) {
                 case 1:
                     Order Ords = makeOrder(sc); //returns a customer with orders made.
-
-                    //TODO: Falta tirar dos produtos disponiveis
                     this.customer.appendOrders(Ords);
                     break;
                 case 2:

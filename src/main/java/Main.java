@@ -173,6 +173,9 @@ class LoggedIn{
             switch (choiceInt) {
                 case 1:
                     Order Ords = makeOrder(sc); //returns a customer with orders made.
+
+                    //TODO: Falta tirar dos produtos disponiveis
+                    this.availableProducts.removeProducts(Ords.getProducts()); //acho que dá
                     this.customer.appendOrders(Ords);
                     break;
                 case 2:

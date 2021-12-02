@@ -35,6 +35,13 @@ class Products implements Serializable {
         this.products.add(product);
     }
 
+    public void removeProducts(ArrayList<Product> products) {
+        for (Product p : products) {
+            this.products.remove(p);
+        }
+        saveproductsOBJ();
+    }
+
 
     private void loadProductsOBJ(){
         if (f.isFile()) {

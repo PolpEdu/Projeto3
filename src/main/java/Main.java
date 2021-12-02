@@ -39,16 +39,18 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
         Products products = new Products();
-        Auth initauth = new Auth(sc);  //Interface for login
-        new LoggedIn(initauth.getLoggedIn(), initauth.getLoggedDate(),products, sc);
+        Date now = new Date(2, 12, 2019);
+        while (true) {
+            Auth initauth = new Auth(sc,products,now);  //Interface for login
+        }
 
     }
 }
 
 class Auth {
     private Customers cs;
-    private Customer loggedIn;
-    private Date now;
+    private Products products;
+    private Date d;
 
     /**
      * Constructor for the Auth class that initializes the customers and prints the Authentication menu
@@ -56,8 +58,10 @@ class Auth {
      *
      *
      */
-    public Auth(Scanner sc) {
+    public Auth(Scanner sc,Products products, Date d){
         this.cs = new Customers();
+        this.products = products;
+        this.d = d;
         welcome(sc);
     }
 
@@ -96,7 +100,7 @@ class Auth {
                     login(sc);
                     break;
                 case 2:
-                    System.out.println("Thank you for using the Java SuperMarket Chain!");
+                    System.out.println("\n\nThank you for using the Java SuperMarket Chain!");
                     sc.close();
                     System.exit(0);
                 default:
@@ -126,19 +130,10 @@ class Auth {
                 email = sc.nextLine();
             }
         }
-        this.loggedIn = customer;
-        this.now = new Date(27,12,2020);
-    }
-    /**
-     * Method that returns the loggedIn variable
-     * @return loggedIn
-     */
-    public Customer getLoggedIn(){
-        return this.loggedIn;
-    }
 
-    public Date getLoggedDate(){
-        return this.now;
+        new LoggedIn(customer, this.d, this.products,sc);
+        //agora que mudei o customer com tudo o que queria, salvo as mudanças.
+        this.cs.savecustomersOBJ();
     }
 }
 
@@ -146,13 +141,13 @@ class Auth {
 /**
  * Class that represents a customer
  */
-class LoggedIn {
-    private Customer customer;
+class LoggedIn{
     private Products availableProducts;
+    private Customer customer;
     private Date loggedDate;
 
-    public LoggedIn(Customer c, Date logged,Products ap, Scanner sc) {
-        this.customer = c;
+    public LoggedIn(Customer loggedC, Date logged,Products ap, Scanner sc) {
+        this.customer = loggedC;
         this.loggedDate = logged;
         this.availableProducts = ap;
 
@@ -177,13 +172,14 @@ class LoggedIn {
 
             switch (choiceInt) {
                 case 1:
-                    makeOrder(sc);
+                    Order Ords = makeOrder(sc); //returns a customer with orders made.
+                    this.customer.appendOrders(Ords);
                     break;
                 case 2:
                     viewOrders();
                     break;
                 case 3:
-                    System.out.println("Thank you for using the Java SuperMarket Chain!");
+                    System.out.println("\n\n\n\nThank you for using the Java SuperMarket Chain!");
                     return;
 
                 default:
@@ -193,12 +189,12 @@ class LoggedIn {
         }
     }
 
-    private void makeOrder(Scanner sc) {
+    private Order makeOrder(Scanner sc) {
         System.out.println("Please enter the products you wish to order:");
         int choiceInt;
         String choice;
         ArrayList<Product> carrinho = new ArrayList<>();
-
+        Order i;
 
         while(true) {
             //chose a product
@@ -222,12 +218,12 @@ class LoggedIn {
                 System.out.println("Do you want to keep ordering? (y)");
                 choice = sc.nextLine();
                 if (!choice.equals("y")) {
-                    Order i = new Order(carrinho, loggedDate);
-                    this.customer.appendOrders(i);
+                    i = new Order(carrinho, loggedDate);
                     break;
                 }
             }
         }
+        return i;
     }
 
     private void viewOrders() {

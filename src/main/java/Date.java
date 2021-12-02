@@ -90,6 +90,10 @@ class Date implements Serializable {
         return false;
     }
 
+    private boolean equals(Date date) {
+        return this.day == date.day && this.month == date.month && this.year == date.year;
+    }
+
     public String toString() {
          return day + "/" + month + "/" + year;
     }

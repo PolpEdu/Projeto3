@@ -1,4 +1,4 @@
-import java.io.Serializable;
+import java.io.*;
 import java.util.Scanner;
 
 class Customer implements Serializable {
@@ -8,6 +8,10 @@ class Customer implements Serializable {
     private long phoneNumber;
     private Date dateOfBirth;
     private Orders orders;
+
+    private final String FILE_NAME = "customerOrders.obj";
+    private File f = new File(FILE_NAME);
+
     protected double transportValue=20;
 
     public Customer(String name, String address, String email, String phoneNumber, Date dateOfBirth) {
@@ -75,6 +79,59 @@ class Customer implements Serializable {
         System.out.println("\nCustomer created successfully:\n" + this);
     }
 
+    public Customer(Customer customer) {
+        this.name = customer.name;
+        this.address = customer.address;
+        this.email = customer.email;
+        this.phoneNumber = customer.phoneNumber;
+        this.dateOfBirth = customer.dateOfBirth;
+        this.orders = customer.orders;
+    }
+/*
+    public void loadOrders(){
+        if (f.exists()){
+            try {
+                FileInputStream fis = new FileInputStream(f);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+
+                Customer customer = (Customer) ois.readObject();
+
+                this.orders = customer.orders;
+
+                ois.close();
+                fis.close();
+            } catch (FileNotFoundException ex) {
+                System.out.println("Error while creating file.");
+            } catch (IOException ex) {
+                System.out.println("Error while reading from the OBJ file.\n"+ex);
+            } catch (ClassNotFoundException ex) {
+                System.out.println("Error while casting object.\n"+ex);
+            }
+        }
+        else {
+            System.out.println("No orders found.");
+        }
+    }
+
+    //save customer orders into an object file
+    public void saveOrders(){
+        try {
+            FileOutputStream fos = new FileOutputStream(f);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(this);
+            //System.out.println("Saved!");
+
+            oos.close();
+            fos.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("Error while creating file.");
+        } catch (IOException ex) {
+            System.out.println("Error while writing to the OBJ file.\n"+ex);
+        }
+    }
+
+*/
     private boolean isValidPhoneNumber(String phoneNumber) {
         if (phoneNumber.length() != 9) {
             return false;

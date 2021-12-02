@@ -58,6 +58,12 @@ class Products implements Serializable {
         }
     }
 
+    private void printProducts() {
+        for (Product p : products) {
+            System.out.println(p);
+        }
+    }
+
     private void saveproductsOBJ() {
         try {
             FileOutputStream fos = new FileOutputStream(f);

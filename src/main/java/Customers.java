@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 class Customers implements Serializable {
     private final String FILE_NAME = "customers.obj";
@@ -108,7 +107,7 @@ class Customers implements Serializable {
         }
     }
 
-    private void savecustomersOBJ() {
+    public void savecustomersOBJ() {
         try {
             FileOutputStream fos = new FileOutputStream(f);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -153,8 +152,12 @@ class Customers implements Serializable {
         return false;
     }
 
+    private void removeCustomer(Customer c) {
+        this.clients.remove(c);
+    }
 
-    private void addCustomer(Customer c) {
+
+    public void addCustomer(Customer c) {
         if (!checkExists(c)){
             this.clients.add(c); //update current clients
 

@@ -94,7 +94,7 @@ class Customers implements Serializable {
                 ObjectInputStream ois = new ObjectInputStream(fis);
                 Customers lido = (Customers) ois.readObject();
 
-                this.clients = lido.getClients();
+                this.clients = lido.clients;
                 //System.out.println("Customers loaded successfully from OBJ file.");
                 //printClients();
                 ois.close();
@@ -124,11 +124,6 @@ class Customers implements Serializable {
         } catch (IOException ex) {
             System.out.println("Error while writing to the OBJ file.\n"+ex);
         }
-    }
-
-    private ArrayList<Customer> getClients() {
-        //System.out.println(this.clients);
-        return this.clients;
     }
 
 
@@ -164,7 +159,7 @@ class Customers implements Serializable {
             this.clients.add(c); //update current clients
 
         } else{
-            System.out.println("Email already registered!");
+            System.out.println("Customer already registered!");
         }
     }
 

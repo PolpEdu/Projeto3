@@ -3,20 +3,21 @@ package main.java;
 import java.io.*;
 import java.util.Scanner;
 
-class Customer implements Serializable {
+abstract class Customer implements Serializable {
     private String name;
     private String address;
     private String email;
     private long phoneNumber;
     private Date dateOfBirth;
     private Orders orders;
+    protected double transportValue=20;
+
 
     private final String FILE_NAME = "customerOrders.obj";
     private File f = new File(FILE_NAME);
 
-    protected double transportValue=20;
 
-    public Customer(String name, String address, String email, String phoneNumber, Date dateOfBirth) {
+    protected Customer(String name, String address, String email, String phoneNumber, Date dateOfBirth) {
         this.name = name;
         this.address = address;
 
@@ -41,7 +42,7 @@ class Customer implements Serializable {
         this.orders = new Orders();
     }
 
-    public Customer(Scanner sc) {
+    /*protected Customer(Scanner sc) {
         // ask for data to create a customer
         System.out.println("Enter customer name: ");
         String name = sc.nextLine();
@@ -79,9 +80,9 @@ class Customer implements Serializable {
         this.dateOfBirth = new Date(sc); //pass the scanner in the date constructor
 
         System.out.println("\nCustomer created successfully:\n" + this);
-    }
+    }*/
 
-    public Customer(Customer customer) {
+    protected Customer(Customer customer) {
         this.name = customer.name;
         this.address = customer.address;
         this.email = customer.email;
@@ -104,7 +105,9 @@ class Customer implements Serializable {
     }
 
     public void appendOrders(Order order) {
+        System.out.println("Appending order to customer: " + this.name);
         this.orders.addOrder(order);
+
     }
 
     public Orders getOrders() {

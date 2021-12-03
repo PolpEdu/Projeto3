@@ -96,6 +96,29 @@ class Date implements Serializable {
         return this.day == date.day && this.month == date.month && this.year == date.year;
     }
 
+    //check if the date is before another date
+    public boolean isBefore(Date date) {
+        if (this.year < date.year) {
+            return true;
+        }
+        else if (this.year == date.year) {
+            if (this.month < date.month) {
+                return true;
+            }
+            else if (this.month == date.month) {
+                if (this.day < date.day) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //check if the date is before after date
+    public boolean isAfter(Date date) {
+        return !this.isBefore(date) && !this.equals(date);
+    }
+
     public String toString() {
          return day + "/" + month + "/" + year;
     }

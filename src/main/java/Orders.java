@@ -11,10 +11,6 @@ class Orders implements Serializable {
         this.orders = new ArrayList<>();
     }
 
-    public int size() {
-        return this.orders.size();
-    }
-
     //add orders
     public void addOrder(Order order) {
         this.orders.add(order);
@@ -26,7 +22,7 @@ class Orders implements Serializable {
 
 
     //get total price
-    public double getTotalPrice() {
+    public double getTotalPricebyClient() {
         double totalPrice = 0;
         for (Order order : orders) {
             totalPrice += order.getPrice();
@@ -41,17 +37,8 @@ class Orders implements Serializable {
         }
 
         String result = "";
-        Date dant = orders.get(0).getDate();
-        Date dasgr;
-        result += "Orders for the Date: "+ dant + "\n";
         for (Order order : orders) {
-            dasgr = order.getDate();
-
-            if (!dant.equals(dasgr)) {
-                result += "Orders for the Date "+dasgr+": \n";
-            }
-
-            result += order+ "\n";
+            result += "\n\nOrder at: "+ order.getDate() + "\n" + order;
         }
         return result;
     }
@@ -62,25 +49,37 @@ class Order implements Serializable {
     private Date orderDate;
     private ArrayList<Product> chosenProducts;
     private double totalprice;
+    private Promotions proms;
 
-    public Order(ArrayList<Product> chosenProducts, Date orderDate) {
+    public Order(ArrayList<Product> chosenProducts, Date orderDate, Customer orderedby, Promotions promotions) {
         this.chosenProducts = chosenProducts;
-
         this.orderDate = orderDate;
+        this.proms = promotions;
         this.totalprice = calcPrice();
     }
 
-
-    private double calcPrice() {
+    public double getDefaulttotalprice() {
         double price = 0;
-        for (Product p : this.chosenProducts) {
-            price += p.getPrice();
+        for (Product p1 : chosenProducts) {
+            price += p1.getPrice();
         }
         return price;
     }
 
-    public int size() {
-        return this.chosenProducts.size();
+    private double calcPrice() {
+        double price = 0;
+        // check if there is a promotion on the current date
+        Promotion p = this.proms.checkPromotions(this);
+        if (p != null) {
+            System.out.println("Promotion on date found! Trying to apply promotion...");
+            price = p.calcPrice(this);
+        }
+        else {
+            System.out.println("Order made! However; No promotions are running on this date....");
+            getDefaulttotalprice();
+        }
+
+        return price;
     }
 
     public Date getDate() {
@@ -95,12 +94,33 @@ class Order implements Serializable {
         return this.chosenProducts;
     }
 
+    public ArrayList<Product> getProductNames() {
+        //add only the names of the products
+        ArrayList<Product> names = new ArrayList<>();
+        for (Product p : chosenProducts) {
+            if (!names.contains(p)) {
+                names.add(p);
+            }
+        }
+        return names;
+    }
+
+    public int getTimesbought(Product p) {
+        int times = 0;
+        for (Product p1 : chosenProducts) {
+            if (p1.getName().equals(p.getName())) {
+                times++;
+            }
+        }
+        return times;
+    }
+
     public String toString() {
         String result = "";
 
         for (Product p : chosenProducts) {
             result += p.getName() + ", " + p.getPrice() + " euro\n";
         }
-        return result + "Total price: " + totalprice +" euro\n";
+        return result + "Total price without discounts: "+ this.getDefaulttotalprice() + "\nWith discounts applied: "+this.totalprice +" euro\n";
     }
 }

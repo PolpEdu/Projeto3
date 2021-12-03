@@ -2,13 +2,13 @@ package main.java;
 
 import java.io.Serializable;
 
-class Product implements Serializable {
+abstract class Product implements Serializable {
     private String name;
     private String identifier;
     private double pricePerUnit;
     private int currentStock;
 
-    public Product(String name, String identifier, double pricePerUnit, int currentStock) {
+    protected Product(String name, String identifier, double pricePerUnit, int currentStock) {
         this.name = name;
         this.identifier = identifier;
         this.pricePerUnit = pricePerUnit;

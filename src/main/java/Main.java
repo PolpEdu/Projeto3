@@ -40,10 +40,11 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        Date now = new Date(2, 12, 2019);
+        Date now = new Date(2, 12, 2021);
         while (true) {
             Products products = new Products();
-            new Auth(sc,products,now);  //Interface for login
+            Promotions promotions = new Promotions();
+            new Auth(sc,products,now,promotions);  //Interface for login
         }
 
     }
@@ -52,6 +53,7 @@ public class Main {
 class Auth {
     private Customers cs;
     private Products products;
+    private Promotions promotions;
     private Date d;
 
     /**
@@ -60,9 +62,10 @@ class Auth {
      *
      *
      */
-    public Auth(Scanner sc,Products products, Date d){
+    public Auth(Scanner sc,Products products, Date d, Promotions promotions) {
         this.cs = new Customers();
         this.products = products;
+        this.promotions = promotions;
         this.d = d;
         welcome(sc);
     }
@@ -80,7 +83,8 @@ class Auth {
      * @param sc Scanner object to read inputs
      */
     private void welcome(Scanner sc) {
-        System.out.println("Welcome to the Java SuperMarket Chain!");
+        System.out.println("\n\n\n\nWelcome to the Java SuperMarket Chain!\n" +
+                "Today's date is: "+ this.d);
         System.out.println("Please login to continue.");
 
         System.out.print("1 - Login\n2 - Exit\nInput: ");
@@ -133,9 +137,10 @@ class Auth {
             }
         }
 
-        new LoggedIn(customer, this.d, this.products,sc);
-        //agora que mudei o customer com tudo o que queria, salvo as mudanças.
+        new LoggedIn(customer, this.d, this.products,sc,this.promotions, this.cs);
+        //save to the obj file since these are the only ones that can be updated
         this.cs.savecustomersOBJ();
+
     }
 }
 
@@ -145,13 +150,17 @@ class Auth {
  */
 class LoggedIn{
     private Products availableProducts;
+    private Promotions availablePromotions;
+    private Customers cs;
     private Customer customer;
     private Date loggedDate;
 
-    public LoggedIn(Customer loggedC, Date logged,Products ap, Scanner sc) {
+    public LoggedIn(Customer loggedC, Date logged,Products ap, Scanner sc, Promotions apromo, Customers availableCustomers) {
         this.customer = loggedC;
         this.loggedDate = logged;
         this.availableProducts = ap;
+        this.availablePromotions = apromo;
+        this.cs = availableCustomers;
 
         System.out.println("Welcome " + this.customer.getName() + "!");
         System.out.println("What do you wish to do?");
@@ -176,6 +185,7 @@ class LoggedIn{
                 case 1:
                     Order Ords = makeOrder(sc); //returns a customer with orders made.
                     this.customer.appendOrders(Ords);
+                    this.cs.savecustomersOBJ();
                     break;
                 case 2:
                     viewOrders();
@@ -223,7 +233,7 @@ class LoggedIn{
                 System.out.println("Do you want to keep ordering? (y)");
                 choice = sc.nextLine();
                 if (!choice.equals("y")) {
-                    i = new Order(carrinho, loggedDate);
+                    i = new Order(carrinho, loggedDate, this.customer, this.availablePromotions);
 
                     break;
                 }

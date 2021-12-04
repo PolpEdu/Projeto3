@@ -40,7 +40,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        Date now = new Date(2, 12, 2021);
+        Date now = new Date(5, 12, 2022);
         while (true) {
             Products products = new Products();
             Promotions promotions = new Promotions();
@@ -83,7 +83,7 @@ class Auth {
      * @param sc Scanner object to read inputs
      */
     private void welcome(Scanner sc) {
-        System.out.println("\n\n\n\nWelcome to the Java SuperMarket Chain!\n" +
+        System.out.println("\nWelcome to the Java SuperMarket Chain!\n" +
                 "Today's date is: "+ this.d);
         System.out.println("Please login to continue.");
 
@@ -110,7 +110,7 @@ class Auth {
                     sc.close();
                     System.exit(0);
                 default:
-                    System.out.println("Invalid input. Please try again.");
+                    System.out.print("Invalid input. Please try again: ");
                     break;
             }
 
@@ -218,6 +218,7 @@ class LoggedIn{
             try {
                 choiceInt = Integer.parseInt(choice);
             } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please try again: ");
                 continue;
             }
 
@@ -234,7 +235,6 @@ class LoggedIn{
                 choice = sc.nextLine();
                 if (!choice.equals("y")) {
                     i = new Order(carrinho, loggedDate, this.customer, this.availablePromotions);
-
                     break;
                 }
             }

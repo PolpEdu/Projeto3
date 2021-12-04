@@ -18,7 +18,6 @@ This cost is applicable	to all Customers.
  */
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 
 abstract class Promotion implements Serializable {
@@ -33,6 +32,7 @@ abstract class Promotion implements Serializable {
     //used to calculate the full price to pay without any special promotions applied
     public double calcPrice(Order order) {
         double price = 0;
+        System.out.println("Calculating price without any special promotions applied");
         for (Product p : order.getProducts()) {
             price += p.getPrice();
 
@@ -66,30 +66,26 @@ class PTTF extends Promotion implements Serializable {
     public PTTF(Date promotionStart, Date promotionEnd) {
         super(promotionStart, promotionEnd);
     }
+
+    //calculate the price after applying the promotion
+    @Override
     public double calcPrice(Order o) {
         double total = 0;
         double pprice ;
         int timesbought;
-        int ptimes ;
-        int resto;
 
         //check for 4 ocorrences of a product in a order
         for (Product p : o.getProductNames()) {
             pprice = p.getPrice();
             timesbought = o.getTimesbought(p);
 
-
-            resto = timesbought % 4;
-            if (timesbought >= 4) {
-                ptimes = Math.floorDiv(timesbought ,4);
-                total += ptimes * 3 * pprice+ (resto-1) * pprice;
-                System.out.println("Applied a Pay-Three-Take-Four promotion!");
-            }
-            else {
-                total += timesbought * pprice;
+            for (int i = 1; i <= timesbought; i++) {
+                if (!(i % 4 == 0)) {
+                    total += pprice;
+                }
             }
         }
-        return total;
+        return Math.round(total * 100.0) / 100.0;
     }
 
     //to string method
@@ -105,9 +101,10 @@ class PL extends Promotion implements Serializable {
         super(promotionStart, promotionEnd);
     }
 
+    @Override
     public double calcPrice(Order o) {
-        double discount = 1;
-        double total = o.getDefaulttotalprice();
+        double discount = 1.05;
+        double total = 0;
         int timesbought;
 
         for (Product p : o.getProductNames()) {
@@ -116,17 +113,20 @@ class PL extends Promotion implements Serializable {
                 while (timesbought > 0) {
                     if (discount > 0.5) {
                         discount -= 0.05;
+                        discount = Math.round(discount * 100.0) / 100.0;
                     }
-                    total += p.getPrice() * discount;
                     timesbought--;
+                    total += p.getPrice() * discount*100.0/100.0;
+                    System.out.println("Incremented in total: " + total);
                 }
             }
             else {
-                total += timesbought* p.getPrice();
+                //if the product is bought only once, the discount is not applied
+                total += p.getPrice()* timesbought;
             }
         }
-        return total * discount;
-
+        //round total * discount with 2 decimals and return it
+        return Math.round(total * 100.0) / 100.0;
     }
 
     @Override

@@ -185,7 +185,8 @@ class Products implements Serializable {
         System.out.println("\nProducts:");
         int i =1;
         for(Product p : this.products) {
-            System.out.println(i+" - "+p.getName()+ ", Preço: "+p.getPrice()+" euro - un:"+p.getCurrentStock());
+            System.out.println(i+" - "+p.getName()+ ", "+
+                    p.getPrice() +" euro ("+p.getPricePerUnit()+"+"+p.getShippingPrice() +") - un: "+p.getCurrentStock());
             i++;
         }
     }
@@ -195,7 +196,8 @@ class Products implements Serializable {
         int i =1;
         for(Product p : this.products) {
             if(i==nr) {
-                System.out.println(p.getName()+ ", Preço: "+p.getPrice()+" euro ");
+                System.out.println(p.getName()+ ", "+
+                        p.getPrice() +" euro ("+p.getPricePerUnit()+"+"+p.getShippingPrice() +") - un: "+p.getCurrentStock());
                 return p;
             }
             i++;

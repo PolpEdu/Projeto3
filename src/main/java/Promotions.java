@@ -30,12 +30,10 @@ class Promotions implements Serializable {
 
     private void loadpromos() {
         if (f.exists() && f.isFile()) {
-
             loadpromotionsOBJ();
         }
         else {
             //loaded from TXT
-
             loadpromotionstxt();
         }
     }
@@ -123,8 +121,8 @@ class Promotions implements Serializable {
                 }
 
                 savepromotionsOBJ();
-                System.out.println("Promotions loaded successfully:");
-                this.printPromotions();
+                //System.out.println("Promotions loaded successfully:");
+                //this.printPromotions();
 
                 br.close();
                 fr.close();

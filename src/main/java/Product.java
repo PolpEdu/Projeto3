@@ -5,14 +5,18 @@ import java.io.Serializable;
 abstract class Product implements Serializable {
     private String name;
     private String identifier;
-    private double pricePerUnit;
     private int currentStock;
+    protected double pricePerUnit;
+    protected double totalPrice;
+    protected double shippingprice;
+
 
     protected Product(String name, String identifier, double pricePerUnit, int currentStock) {
         this.name = name;
         this.identifier = identifier;
         this.pricePerUnit = pricePerUnit;
         this.currentStock = currentStock;
+        this.totalPrice = this.pricePerUnit + this.shippingprice;
     }
 
     public void removeun(int nr) {
@@ -23,16 +27,24 @@ abstract class Product implements Serializable {
         return this.name;
     }
 
+    public double getShippingPrice(){
+        return this.shippingprice;
+    }
+
     protected String getBarcode() {
         return this.identifier;
     }
 
     protected double getPrice() {
-        return this.pricePerUnit;
+        return this.totalPrice;
     }
 
     protected int getCurrentStock() {
         return this.currentStock;
+    }
+
+    public double getPricePerUnit() {
+        return this.pricePerUnit;
     }
 
 }
@@ -48,11 +60,15 @@ class FoodProduct extends Product implements Serializable{
             throw new IllegalArgumentException("percentageOfFat must be between 0 and 100");
         }
         this.percentageOfFat = percentageOfFat;
+        this.shippingprice = 0;
+        this.totalPrice = this.pricePerUnit + this.shippingprice;
     }
+
 
     // Return tostring methods
     public String toString() {
-        return "FoodProduct: " + this.getName() + " id:" + this.getBarcode() + " " + this.getPrice() + " euro " + this.getCurrentStock() + "un. " + this.calories + "/100g " + this.percentageOfFat+"%";
+        return "FoodProduct: " + this.getName() + " id:" + this.getBarcode() + " Total Price: "+
+                this.getPrice() +" euro ("+this.getPricePerUnit()+"+"+this.getShippingPrice() +") , "+ this.getCurrentStock() + "un. " + this.calories + "/100g " + this.percentageOfFat+"%";
     }
 
 }
@@ -66,11 +82,22 @@ class CleaningProduct extends Product implements Serializable {
         if (toxicity < 0 || toxicity > 10) {
             throw new IllegalArgumentException("Toxicity must be between 0 and 10");
         }
+
         this.toxicity = toxicity;
+        this.shippingprice = 0;
+        this.totalPrice = this.pricePerUnit + this.shippingprice;
+
     }
 
+    @Override
+    public double getShippingPrice(){
+        return this.shippingprice;
+    }
+
+    @Override
     public String toString() {
-        return "CleaningProduct: " + this.getName() + " id:" + this.getBarcode() + " " + this.getPrice() + " euro " + this.getCurrentStock() + "un. " + this.toxicity;
+        return "CleaningProduct: " + this.getName() + " id:" + this.getBarcode() + " " + ", Total Price:" +
+                this.getPrice() +" euro ("+this.getPricePerUnit()+"+"+this.getShippingPrice() +") - "+ this.getCurrentStock() + "un. " + this.toxicity;
     }
 }
 
@@ -88,10 +115,13 @@ class FurnitureProduct extends Product implements Serializable {
         this.width = width;
         this.depth = depth;
         this.dimension = height * width * depth;
+        this.shippingprice = this.weight > 15 ? 10 : 0;
+        this.totalPrice = this.pricePerUnit + this.shippingprice;
     }
-
+    @Override
     public String toString() {
-        return "FurnitureProduct: " + this.getName() + " id:" + this.getBarcode() + " " + this.getPrice() + " euro " + this.getCurrentStock() + "un. " + this.weight + "kg " + this.height + "cm " + this.width + "cm " + this.depth + "cm " + this.dimension+"cm^3";
+        return "FurnitureProduct: " + this.getName() + " id:" + this.getBarcode() + ", Total Price:" +
+                this.getPrice() +" euro ("+this.getPricePerUnit()+"+"+this.getShippingPrice() +") - " + this.getCurrentStock() + "un. " + this.weight + " kg " + this.height + "cm " + this.width + "cm " + this.depth + "cm " + this.dimension+"cm^3";
     }
 
 }

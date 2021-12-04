@@ -153,7 +153,6 @@ class Customers implements Serializable {
         this.clients.remove(c);
     }
 
-
     public void addCustomer(Customer c) {
         if (!checkExists(c)){
             this.clients.add(c); //update current clients

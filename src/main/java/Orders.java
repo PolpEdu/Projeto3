@@ -40,22 +40,30 @@ class Orders implements Serializable {
         for (Order order : orders) {
             result += "\n\nOrder at: "+ order.getDate() + "\n" + order;
         }
-        return result;
+        return result+"\n";
     }
 
 }
 
 class Order implements Serializable {
-    private Date orderDate;
     private ArrayList<Product> chosenProducts;
-    private double totalprice;
     private Promotions proms;
+    private Date orderDate;
+    private Customer orderedby;
+
+    private double transportvalue;
+    private double withdiscountsapplied;
+    private double totalprice;
 
     public Order(ArrayList<Product> chosenProducts, Date orderDate, Customer orderedby, Promotions promotions) {
         this.chosenProducts = chosenProducts;
         this.orderDate = orderDate;
         this.proms = promotions;
-        this.totalprice = calcPrice();
+        this.orderedby = orderedby;
+
+        this.withdiscountsapplied = this.calcPrice(); //with discounts applied
+        this.transportvalue = this.orderedby.getTransportValue(withdiscountsapplied);
+        this.totalprice = this.transportvalue+ this.withdiscountsapplied;
     }
 
     public double getDefaulttotalprice() {
@@ -63,7 +71,8 @@ class Order implements Serializable {
         for (Product p1 : chosenProducts) {
             price += p1.getPrice();
         }
-        return price;
+        //round price by 2 decimals
+        return Math.round(price * 100.0) / 100.0;
     }
 
     private double calcPrice() {
@@ -119,8 +128,12 @@ class Order implements Serializable {
         String result = "";
 
         for (Product p : chosenProducts) {
-            result += p.getName() + ", " + p.getPrice() + " euro\n";
+            result += p.getName() + ", " +
+                    p.getPrice() +" euro ("+p.getPricePerUnit()+"+"+p.getShippingPrice() +")\n";
         }
-        return result + "Total price without discounts: "+ this.getDefaulttotalprice() + "\nWith discounts applied: "+this.totalprice +" euro\n";
+        System.out.println("");
+        return result + "Total price without discounts and transport: "+ this.getDefaulttotalprice() + " euro\n" +
+                "With discounts applied and no transports: "+this.withdiscountsapplied +" euro\n" +
+                "Total price with discounts and transports: "+this.totalprice+" euro (transport value is "+this.transportvalue+" euro) \n";
     }
 }

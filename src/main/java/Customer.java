@@ -10,7 +10,7 @@ abstract class Customer implements Serializable {
     private long phoneNumber;
     private Date dateOfBirth;
     private Orders orders;
-    protected double transportValue=20;
+    protected double transportValue=0;
 
 
     private final String FILE_NAME = "customerOrders.obj";
@@ -105,9 +105,7 @@ abstract class Customer implements Serializable {
     }
 
     public void appendOrders(Order order) {
-        System.out.println("Appending order to customer: " + this.name);
         this.orders.addOrder(order);
-
     }
 
     public Orders getOrders() {
@@ -154,13 +152,13 @@ class FrequentCustomer extends Customer implements Serializable {
         super(name, address, email, phoneNumber, dateOfBirth);
     }
 
-    private double calctransportValue(double orderValue) {
-        return orderValue > 40 ? 0.0 : 15.0;
+    private void calctransportValue(double orderValue) {
+        this.transportValue = orderValue > 40 ? 0.0 : 15.0;
     }
 
     @Override
     public double getTransportValue(double orderValue) {
-        this.transportValue = calctransportValue(orderValue);
+        calctransportValue(orderValue); //assign correct value to transportValue
         return this.transportValue;
     }
 

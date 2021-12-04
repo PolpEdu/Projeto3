@@ -8,7 +8,7 @@ A;Cerveja Brasileira;891937276454;1.0;4;10;4
 A;Cacho Fresco;183859291818;1.09;672382;150;30
 A;Cerveja Portuguesa;009919182726;0.80;999999999;500;10
 A;Caixa de Pastel de Nata (caixa grande);675048920101;3.20;60;1200;10
-F;Cortina para Banheira (versão Faísca Mcqueen);919575673837;20.0;1;1;200;300;0.1
+F;Cortina para Banheira (versão Faísca Mcqueen);919575673837;20.0;1;11;200;300;0.1
 F;Tapete para Porta (versão Faísca Mcqueen);645929178372;40.0;2;5;70;40;5
 F;Cama de Casal (versão Faísca Mcqueen);123456789012;100.0;1;2000;3000;1000;2000
 F;Mesa com Desenhos (versão Faísca Mcqueen);957361573271;3.50;60;500;500;300;300

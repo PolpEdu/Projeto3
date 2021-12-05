@@ -46,7 +46,6 @@ class Products implements Serializable {
         saveproductsOBJ();
     }
 
-
     private void loadProductsOBJ(){
         if (f.isFile()) {
             try {
@@ -54,7 +53,7 @@ class Products implements Serializable {
                 ObjectInputStream ois = new ObjectInputStream(fis);
                 Products lido = (Products) ois.readObject();
 
-                this.products = lido.getProducts();
+                this.products = lido.products;
                 //System.out.println("Products loaded successfully from OBJ file.");
                 //printProducts();
                 ois.close();
@@ -204,8 +203,6 @@ class Products implements Serializable {
         }
         return null;
     }
-
-
 
     @Override
     public String toString() {

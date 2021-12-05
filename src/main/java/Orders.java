@@ -2,6 +2,7 @@ package main.java;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 class Orders implements Serializable {
 
@@ -136,4 +137,141 @@ class Order implements Serializable {
                 "With discounts applied and no transports: "+this.withdiscountsapplied +" euro\n" +
                 "Total price with discounts and transports: "+this.totalprice+" euro (transport value is "+this.transportvalue+" euro) \n";
     }
+}
+
+/**
+ * Class that represents a customer LoggedIn.
+ *
+ * @author Eduardo Nunes
+ */
+class LoggedIn{
+    private Products availableProducts; //all products in the database
+    private Promotions availablePromotions; //all promotions in the database
+    private Customers cs; //all customers in the database
+    private Customer customer; //the customer that is logged in
+    private Date loggedDate; //the date the customer logged in
+
+    /**
+     * Constructor for the LoggedIn class that initializes the customer, along with the current date,
+     * available products, customers and promotions and prints the LoggedIn menu.
+     *
+     * @param loggedC the customer that is logged in to apply transport fees associated with the type of customer
+     * @param logged Date the date that the customer logged in to check what promotions are available at that time
+     * @param ap Products object to access the products that the store has to offer
+     * @param sc Scanner object to read inputs
+     * @param apromo promotions Promotions object to search for promotions and apply them
+     * @param availableCustomers All customers object to update the customers file object
+     */
+    public LoggedIn(Customer loggedC, Date logged, Products ap, Scanner sc, Promotions apromo, Customers availableCustomers) {
+        //assign the parameters to the class variables
+        this.customer = loggedC;
+        this.loggedDate = logged;
+        this.availableProducts = ap;
+        this.availablePromotions = apromo;
+        this.cs = availableCustomers;
+
+        //print out a simple logged-in menu with the customer logged in name
+        System.out.println("\n\n\nWelcome " + this.customer.getName() + "!");
+        System.out.println("What do you wish to do?");
+        this.menu(sc); // print out the menu
+    }
+
+    /**
+     * Method that prints out the LoggedIn menu
+     *
+     * In this method the user is asked:
+     *
+     * <ul>
+     *     <li>If he wants to make an order</li>
+     *     <li>If he wants to check is previous orders</li>
+     *     <li>If he wants to Log out (exit to the previous menu)</li>
+     * </ul>
+     *
+     * @param sc Scanner object to read inputs
+     */
+    private void menu(Scanner sc) {
+        String choice;
+        int choiceInt;
+
+        while (true) {
+            System.out.print("1 - Make an order\n2 - View previous orders\n3 - Logout\nInput: ");
+            choice = sc.nextLine();
+            try {
+                choiceInt = Integer.parseInt(choice);
+
+            } catch (NumberFormatException e) {
+                continue;
+            }
+
+            switch (choiceInt) {
+                case 1:
+                    Order Ords = makeOrder(sc); //returns a customer with orders made.
+                    this.customer.appendOrders(Ords);
+                    this.cs.savecustomersOBJ();
+                    break;
+                case 2:
+                    viewOrders();
+                    break;
+                case 3:
+                    System.out.println("\n\n\n\nThank you for using the Java SuperMarket Chain!");
+                    return;
+
+                default:
+                    System.out.println("Invalid input. Please try again.");
+                    break;
+            }
+        }
+    }
+
+    private Order makeOrder(Scanner sc) {
+        System.out.println("Please enter the products you wish to order:");
+        int choiceInt;
+        String choice;
+        ArrayList<Product> carrinho = new ArrayList<>();
+        Order i;
+
+        while(true) {
+            //chose a product
+            availableProducts.printProductsSelection();
+            System.out.print("Input: ");
+
+
+            choice = sc.nextLine();
+            try {
+                choiceInt = Integer.parseInt(choice);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please try again: ");
+                continue;
+            }
+
+            Product pchosen = availableProducts.getProduct(choiceInt);
+            if (pchosen == null) {
+                System.out.println("Invalid input. Please try again.");
+            }
+            else {
+                carrinho.add(pchosen);
+                //System.out.println(carrinho);
+                this.availableProducts.removeProducts(pchosen,1);
+
+                System.out.println("Do you want to keep ordering? (y)");
+                choice = sc.nextLine();
+                if (!choice.equals("y")) {
+                    i = new Order(carrinho, loggedDate, this.customer, this.availablePromotions);
+                    break;
+                }
+            }
+        }
+        return i;
+    }
+
+    private void viewOrders() {
+        if (this.customer.getOrders() == null) {
+            System.out.println("No previous orders.");
+        } else {
+            System.out.println("Previous orders for the customer "+this.customer.getName()+":");
+            //still need to load order from obj
+            System.out.println(this.customer.getOrders());
+        }
+    }
+
 }

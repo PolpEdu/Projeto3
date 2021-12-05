@@ -4,17 +4,20 @@ import java.io.*;
 import java.util.ArrayList;
 
 class Customers implements Serializable {
-    private final String FILE_NAME = "customers.obj";
-    private File f = new File(FILE_NAME);
+    private final String FILE_NAME = "customers.obj"; // .obj file name
+    private File f = new File(FILE_NAME); // file object
 
 
-    private final String INIT_TXT = "clients.txt";
-    private File t = new File(INIT_TXT);
+    private final String INIT_TXT = "clients.txt"; // .txt file name
+    private File t = new File(INIT_TXT); // file object
 
     private ArrayList<Customer> clients;
 
+    /**
+     * Constructor that loads the customers from the object file.
+     */
     public Customers() {
-        clients = new ArrayList<>();
+        clients = new ArrayList<>(); //empty list
         loadcustomers();
     }
 
@@ -126,7 +129,6 @@ class Customers implements Serializable {
         }
     }
 
-
     //testing purposes
     private void printClients() {
         System.out.println("\nCustomers:");
@@ -134,7 +136,6 @@ class Customers implements Serializable {
             System.out.println(c);
         }
     }
-
 
 
     private boolean checkExists(Customer c) {

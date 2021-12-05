@@ -42,7 +42,8 @@ abstract class Customer implements Serializable {
         this.orders = new Orders();
     }
 
-    /*protected Customer(Scanner sc) {
+    @Deprecated
+    protected Customer(Scanner sc) {
         // ask for data to create a customer
         System.out.println("Enter customer name: ");
         String name = sc.nextLine();
@@ -80,9 +81,10 @@ abstract class Customer implements Serializable {
         this.dateOfBirth = new Date(sc); //pass the scanner in the date constructor
 
         System.out.println("\nCustomer created successfully:\n" + this);
-    }*/
+    }
 
-    protected Customer(Customer customer) {
+    @Deprecated
+    public Customer(Customer customer) { // doesn't check if the customer date is valid
         this.name = customer.name;
         this.address = customer.address;
         this.email = customer.email;

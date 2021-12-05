@@ -67,7 +67,7 @@ class FoodProduct extends Product implements Serializable{
 
     // Return tostring methods
     public String toString() {
-        return "FoodProduct: " + this.getName() + " id:" + this.getBarcode() + " Total Price: "+
+        return "Food Product: " + this.getName() + " id:" + this.getBarcode() + " Total Price: "+
                 this.getPrice() +" euro ("+this.getPricePerUnit()+"+"+this.getShippingPrice() +") , "+ this.getCurrentStock() + "un. " + this.calories + "/100g " + this.percentageOfFat+"%";
     }
 
@@ -96,7 +96,7 @@ class CleaningProduct extends Product implements Serializable {
 
     @Override
     public String toString() {
-        return "CleaningProduct: " + this.getName() + " id:" + this.getBarcode() + " " + ", Total Price:" +
+        return "Cleaning Product: " + this.getName() + " id:" + this.getBarcode() + " " + ", Total Price:" +
                 this.getPrice() +" euro ("+this.getPricePerUnit()+"+"+this.getShippingPrice() +") - "+ this.getCurrentStock() + "un. " + this.toxicity;
     }
 }
@@ -120,7 +120,7 @@ class FurnitureProduct extends Product implements Serializable {
     }
     @Override
     public String toString() {
-        return "FurnitureProduct: " + this.getName() + " id:" + this.getBarcode() + ", Total Price:" +
+        return "Furniture Product: " + this.getName() + " id:" + this.getBarcode() + ", Total Price:" +
                 this.getPrice() +" euro ("+this.getPricePerUnit()+"+"+this.getShippingPrice() +") - " + this.getCurrentStock() + "un. " + this.weight + " kg " + this.height + "cm " + this.width + "cm " + this.depth + "cm " + this.dimension+"cm^3";
     }
 

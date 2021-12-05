@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 /**
  * Main class that runs the application and initializes the default objects,
- * such as initial ({@link Auth}), {@link Products}, {@link Promotions}, current time (by a class {@link Date}) and scanner to read inputs.
+ * such as initial {@link Auth Authentication Menu}, {@link Products}, {@link Promotions}, current time (by a class {@link Date}) and {@link Scanner} to read inputs.
  *
  * @author Eduardo Nunes
  */
@@ -35,13 +35,28 @@ public class Main {
  * @author Eduardo Nunes
  */
 class Auth {
-    private Customers cs; //all customers in the database
-    private Products products; //all products in the database
-    private Promotions promotions; //all promotions in the database
-    private Date d; //current date
+    /**
+     * All customers in the database
+     */
+    private Customers cs;
 
     /**
-     * Constructor for the Auth class that initializes the customers and prints the Authentication menu
+     * All products in the database
+     */
+    private Products products;
+
+    /**
+     * All promotions in the database
+     */
+    private Promotions promotions;
+
+    /**
+     * Current date
+     */
+    private Date d;
+
+    /**
+     * Constructor for the Auth class that initializes the customers {@link Customers} and prints the Authentication menu {@link Auth#welcome(Scanner)}.
      *
      * @param sc Scanner object to read inputs
      * @param products Products object that contains all products in the database
@@ -61,7 +76,7 @@ class Auth {
      *
      * In this method the user is asked:
      * <ul>
-     *     <li>If the user wants to log in</li>
+     *     <li>If the user wants to log in, {@link #login(Scanner)}</li>
      *     <li>If the user wants to exit</li>
      * </ul>
      *
@@ -103,8 +118,8 @@ class Auth {
     }
 
     /**
-     * Method that asks for login. If the login was successful, the loggedIn variable
-     * is set to the customer and the current date is set to the date loggedIn.
+     * Method that asks for login.
+     * <p>If the login was successful, creates a {@link LoggedIn Logged In Object} which contains the customer and date information</p>
      *
      * @param sc Scanner object to read inputs
      */

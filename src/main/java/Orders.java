@@ -170,7 +170,7 @@ class Order implements Serializable {
     }
 
     /**
-     * Check how many times a given product is in the order.
+     * Method to check how many times a given product is in the order.
      *
      * @param p Product to check
      * @return number of times the given product is in the order
@@ -197,169 +197,11 @@ class Order implements Serializable {
             result += p.getName() + ", " +
                     p.getPrice() +" euro ("+p.getPricePerUnit()+"+"+p.getShippingPrice() +")\n";
         }
-        System.out.println("");
+        System.out.println(); // new line
         return result + "Total price without discounts and transport: "+ this.getDefaulttotalprice() + " euro\n" +
                 "With discounts applied and no transports: "+this.withdiscountsapplied +" euro\n" +
                 "Total price with discounts and transports: "+this.totalprice+" euro (transport value is "+this.transportvalue+" euro) \n";
     }
 }
 
-/**
- * Class that represents a customer LoggedIn.
- *
- * @author Eduardo Nunes
- */
-class LoggedIn{
-    private Products availableProducts; //all products in the database
-    private Promotions availablePromotions; //all promotions in the database
-    private Customers cs; //all customers in the database
-    private Customer customer; //the customer that is logged in
-    private Date loggedDate; //the date the customer logged in
 
-    /**
-     * Constructor for the LoggedIn class that initializes the customer, along with the current date,
-     * available products, customers and promotions and prints the LoggedIn menu.
-     *
-     * @param loggedC the customer that is logged in to apply transport fees associated with the type of customer
-     * @param logged Date the date that the customer logged in to check what promotions are available at that time
-     * @param ap Products object to access the products that the store has to offer
-     * @param sc Scanner object to read inputs
-     * @param apromo promotions Promotions object to search for promotions and apply them
-     * @param availableCustomers All customers object to update the customers file object
-     */
-    public LoggedIn(Customer loggedC, Date logged, Products ap, Scanner sc, Promotions apromo, Customers availableCustomers) {
-        //assign the parameters to the class variables
-        this.customer = loggedC;
-        this.loggedDate = logged;
-        this.availableProducts = ap;
-        this.availablePromotions = apromo;
-        this.cs = availableCustomers;
-
-        //print out a simple logged-in menu with the customer logged in name
-        System.out.println("\n\n\nWelcome " + this.customer.getName() + "!");
-        System.out.println("What do you wish to do?");
-        this.menu(sc); // print out the menu
-    }
-
-    /**
-     * Method that prints out the LoggedIn menu
-     *
-     * In this method the user is asked:
-     *
-     * <ul>
-     *     <li>If he wants to make an order</li>
-     *     <li>If he wants to check is previous orders</li>
-     *     <li>If he wants to Log out (exit to the previous menu)</li>
-     * </ul>
-     *
-     * @param sc Scanner object to read inputs
-     */
-    private void menu(Scanner sc) {
-        String choice; //the user's choice
-        int choiceInt; //the user's choice as an integer
-
-        while (true) {
-
-            System.out.print("1 - Make an order\n2 - View previous orders\n3 - Logout\nInput: ");
-            choice = sc.nextLine(); //read the user's choice
-            try {
-                choiceInt = Integer.parseInt(choice); // try to convert the choice to an integer
-
-            } catch (NumberFormatException e) { //if the choice is not an integer
-                continue; //go back to the beginning of the loop
-            }
-
-            switch (choiceInt) {
-                case 1:
-                    Order Ords = makeOrder(sc); //returns an Order object created by the user
-                    this.customer.appendOrders(Ords); //updates all customers with the new orders
-                    this.cs.savecustomersOBJ(); //saves the customers in .obj file
-                    break;
-                case 2:
-                    viewOrders(); //prints out the customer's previous orders
-                    break;
-                case 3:
-                    System.out.println("\n\n\n\nThank you for using the Java SuperMarket Chain!");
-                    return;
-
-                default:
-                    System.out.println("Invalid input. Please try again.");
-                    break;
-            }
-        }
-    }
-
-    /**
-     * Method that allows logged in customers to make an order.
-     *
-     * @param sc Scanner object to read inputs
-     * @return Order object with the order made
-     */
-    private Order makeOrder(Scanner sc) {
-        System.out.println("Please enter the products you wish to order:");
-
-        String choice; //the user's choice
-        int choiceInt; //the user's choice as an integer
-
-        ArrayList<Product> carrinho = new ArrayList<>();  // list of products that the user wants to order
-
-        Order i; //the order to be made
-        while(true) {
-            availableProducts.printProductsSelection(); //prints out the available products
-
-            //asks the user to enter the product's index from the list above
-            System.out.print("Input: ");
-            choice = sc.nextLine();
-            try {
-                choiceInt = Integer.parseInt(choice); //try to convert the choice to an integer
-            } catch (NumberFormatException e) { //if the choice is not an integer
-                System.out.println("Invalid input. Please try again: "); //inform the user
-                continue; //go back to the beginning of the loop
-            }
-
-            Product pchosen = availableProducts.getProduct(choiceInt); //get the product chosen by the user
-            if (pchosen == null) { // if the product chosen is not in the list
-                System.out.println("Invalid input. Please try again.");
-                //go back to the beginning of the loop (i == null)
-            }
-            else {
-                carrinho.add(pchosen); //add the product to the list of products chosen by the user
-
-                //remove the product unit from the list of available products, so it can't be chosen again
-                this.availableProducts.removeProducts(pchosen,1);
-
-                System.out.println("Do you want to keep ordering? (y)"); // ask the user if he wants to order more products
-                choice = sc.nextLine(); //read the user's choice
-                if (!choice.equals("y")) { //if the user doesn't want to order more products
-                    i = new Order(carrinho, loggedDate, this.customer, this.availablePromotions); //create the order
-                    break; //break out of the loop
-                }
-            }
-        }
-        return i; //return the order made by the user
-    }
-
-    /**
-     * Method that prints out the customer's previous orders,
-     * this method checks if the customer has any previous orders.
-     * If he does, it prints out the orders.
-     *
-     * <p style="font-weight: bold;">There's no need to load the customers from the .obj file
-     * because if the customer made orders after the customer object is constructed,
-     * they are already in the customer object.</p>
-     *
-     */
-    private void viewOrders() {
-        if (this.customer.getOrders() == null) { // if the customer has no orders
-            System.out.println("No previous orders."); // there's nothing to print
-        } else {
-            System.out.println("Previous orders for the customer "+this.customer.getName()+":"); // print the customer's name
-
-            //! There's no needing loading the orders from the file again because:
-            //! we already did it on the customer's constructor and if the customer has made any orders since,
-            //! the orders are already in the customer's orders list.
-            System.out.println(this.customer.getOrders()); //print the orders by this customer
-        }
-    }
-
-}

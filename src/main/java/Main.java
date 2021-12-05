@@ -3,7 +3,8 @@ import java.util.Scanner;
 
 /**
  * Main class that runs the application and initializes the default objects,
- * such as menus, customers, products, discounts, and orders.
+ * such as initial ({@link Auth}), {@link Products}, {@link Promotions}, current time (by a class {@link Date}) and scanner to read inputs.
+ *
  * @author Eduardo Nunes
  */
 public class Main {
@@ -59,7 +60,6 @@ class Auth {
      * Method that welcomes the user and asks for login
      *
      * In this method the user is asked:
-     *
      * <ul>
      *     <li>If the user wants to log in</li>
      *     <li>If the user wants to exit</li>

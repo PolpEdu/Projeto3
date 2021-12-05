@@ -4,34 +4,36 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Class that represents a set of orders.
+ *
+ * @author Eduardo Nunes
+ */
 class Orders implements Serializable {
-
+    /** Where the orderes will be stored, ArrayList of Orders. */
     private ArrayList<Order> orders;
 
+    /**
+     * Constructor of the set of Orders. It simply assigns the current Orders to an empty Array List of Orders.
+     */
     public Orders() {
         this.orders = new ArrayList<>();
     }
 
-    //add orders
+    /**
+     * Method that adds an order to the set of Orders.
+     *
+     * @param order Order to be added.
+     */
     public void addOrder(Order order) {
         this.orders.add(order);
     }
 
-    private ArrayList<Order> getOrders() {
-        return this.orders;
-    }
-
-
-    //get total price
-    public double getTotalPricebyClient() {
-        double totalPrice = 0;
-        for (Order order : orders) {
-            totalPrice += order.getPrice();
-        }
-        return totalPrice;
-    }
-
-    //to String method
+    /**
+     * Method toString of the class Orders.
+     *
+     * @return String representation of a set of Orders.
+     */
     public String toString() {
         if (this.orders.size() == 0) {
             return "No orders\n\n";
@@ -43,14 +45,12 @@ class Orders implements Serializable {
         }
         return result+"\n";
     }
-
 }
 
 /**
  * Class that contains information about an order.
  *
  * @author Eduardo Nunes
- *
  */
 class Order implements Serializable {
     private ArrayList<Product> chosenProducts; // list of products chosen by the client
@@ -63,7 +63,7 @@ class Order implements Serializable {
     private double totalprice; // total price of the order (transport + products + discounts)
 
     /**
-     * Constructor of the class Order.
+     * Constructor of the class {@link Order}.
      * The Order contains information such as:
      * <ul>
      *      <li>The products ordered in an array list with the Product type</li>

@@ -36,7 +36,7 @@ class LoggedIn{
     private Date loggedDate;
 
     /**
-     * Constructor for the LoggedIn class that assigns the object {@link Customer} to the one that logged in, along with the current {@link Date},
+     * Constructor for the {@link LoggedIn} class that assigns the object {@link Customer} to the one that logged in, along with the current {@link Date},
      * available {@link Products}, all {@link Customers} and {@link Promotions} and prints the {@link #menu(Scanner) LoggedIn menu}.
      *
      * @param loggedC the customer that is logged in to apply transport fees associated with the type of customer
@@ -185,43 +185,85 @@ class LoggedIn{
 
 }
 
+/**
+ * Class that represents a default Customer, this class extends into different types of Customers.
+ * We need more than one type of Customer since the transport value is calculated differently.
+ *
+ * @author Eduardo Nunes
+ */
 abstract class Customer implements Serializable {
+    /**
+     * The customer's name.
+     */
     private String name;
+
+    /**
+     * The customer's address.
+     */
     private String address;
+
+    /**
+     * The customer's email.
+     */
     private String email;
+
+    /**
+     * The customer's phone number.
+     */
     private long phoneNumber;
+
+    /**
+     * The customer's date of birth.
+     */
     private Date dateOfBirth;
+
+    /**
+     * The customer's orders.
+     */
     private Orders orders;
+
+    /**
+     * The customer's transport value (which is set to 0, because the default customer has no transport value).
+     */
     protected double transportValue=0;
 
-
-    private final String FILE_NAME = "customerOrders.obj";
-    private File f = new File(FILE_NAME);
-
-
+    /**
+     * Constructor of the class {@link Customer}, it initializes the {@link #name customer's name}, {@link #address}, {@link #email}, {@link #phoneNumber phone number}, {@link #dateOfBirth date of birth} and {@link #orders}.
+     * It is protected since it is only used by the subclasses, and the registration of a new customer is not implemented.
+     *
+     * @throws IllegalArgumentException if the {@link #email customer's email} is invalid.
+     * @throws IllegalArgumentException if the {@link #phoneNumber customer's phone number} is invalid.
+     * @throws NumberFormatException if the {@link #phoneNumber customer's phone number} is not a real phone number.
+     *
+     * @param name The customer's name.
+     * @param address The customer's address.
+     * @param email The customer's email.
+     * @param phoneNumber The customer's phone number.
+     * @param dateOfBirth The customer's date of birth.
+     */
     protected Customer(String name, String address, String email, String phoneNumber, Date dateOfBirth) {
-        this.name = name;
-        this.address = address;
+        this.name = name; // assign the name
+        this.address = address; // assign the address
 
-        if (!email.contains("@")) {
+        if (!email.contains("@")) { // if the email doesn't contain the @ symbol, it's not valid
             throw new IllegalArgumentException("Invalid email address.");
         }
-        this.email = email;
+        this.email = email; // else assign the email
 
 
-        if(!isValidPhoneNumber(phoneNumber)){
+        if(!isValidPhoneNumber(phoneNumber)){ //check if the phone number is valid
             throw new IllegalArgumentException("Invalid phone number. On client: "+this.name);
         }
         try {
-            this.phoneNumber = Long.parseLong(phoneNumber);
+            this.phoneNumber = Long.parseLong(phoneNumber); //try to parse the phone number to a long
 
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Couldn't parse phone number.");
+            throw new NumberFormatException("Couldn't parse phone number.");
         }
 
-        this.dateOfBirth = dateOfBirth;
+        this.dateOfBirth = dateOfBirth; // assign the date of birth
 
-        this.orders = new Orders();
+        this.orders = new Orders(); // create a new empty orders object and assign it to the customer
     }
 
     @Deprecated
@@ -275,39 +317,76 @@ abstract class Customer implements Serializable {
         this.orders = customer.orders;
     }
 
+    /**
+     * Method that checks if the phone number is valid.
+     *
+     * @return true if the phone number is valid, false otherwise.
+     */
     private boolean isValidPhoneNumber(String phoneNumber) {
-        if (phoneNumber.length() != 9) {
+        if (phoneNumber.length() != 9) { // if the phone number is not 9 digits, it's not valid
             return false;
         }
 
-        for (int i = 0; i < phoneNumber.length(); i++) {
-            if (!Character.isDigit(phoneNumber.charAt(i))) {
+        for (int i = 0; i < phoneNumber.length(); i++) { // for each character in the phone number
+            if (!Character.isDigit(phoneNumber.charAt(i))) { // if the character is not a digit, it's not valid
                 return false;
             }
         }
         return true;
     }
 
+    /**
+     * Method that adds an order to the customer's orders.
+     *
+     * @param order The order to be added.
+     */
     public void appendOrders(Order order) {
-        this.orders.addOrder(order);
+        this.orders.addOrder(order); // add the order to the customer's list of orders
     }
 
+    /**
+     * Method that returns the customer's orders.
+     *
+     * @return The customer's orders.
+     */
     public Orders getOrders() {
         return this.orders;
     }
 
+    /**
+     * Method that returns a customer's transport value depending on the type of customer.
+     * This method will be overridden by the type of customers.
+     *
+     * @param orderValue The value of the order.
+     * @return The transport value of the customer.
+     */
     public double getTransportValue(double orderValue) {
         return this.transportValue;
     }
 
+    /**
+     * Method that returns the customer's email.
+     *
+     * @return The customer's email.
+     */
     public String getEmail() {
         return this.email;
     }
 
+    /**
+     * Method that returns the customer's name.
+     *
+     * @return The customer's name.
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Method toString of a Customer.
+     *
+     * @return A string representation of the customer.
+     */
     @Override
     public String toString() {
         return "Name: " + name + "; Address: " + address +"; Email: " + email + "; Phone number: " + phoneNumber+ "; Date of birth: " + dateOfBirth+"\n" +
@@ -315,37 +394,99 @@ abstract class Customer implements Serializable {
     }
 }
 
+/**
+ * Class that represents a Regular Customer. A type of Customer.
+ *
+ * @author Eduardo Nunes
+ */
 class RegularCustomer extends Customer implements Serializable {
+    /**
+     * The transport value of a regular customer which is 20 for a Regular Customer.
+     */
+    private double TRANSPORTVALUEREGULARCUSTOMER = 20;
+
+    /**
+     * Constructor of a {@link RegularCustomer Regular Customer}. This constructor simply calls the super constructor, and sets the default of the transport value of a {@link RegularCustomer Regular Customer}.
+     *
+     * @param name The name of the customer.
+     * @param address The address of the customer.
+     * @param email The email of the customer.
+     * @param phoneNumber The phone number of the customer.
+     * @param dateOfBirth The date of birth of the customer.
+     *
+     */
     public RegularCustomer(String name, String address, String email, String phoneNumber, Date dateOfBirth) {
         super(name, address, email, phoneNumber, dateOfBirth);
+        this.transportValue = TRANSPORTVALUEREGULARCUSTOMER;
     }
 
+    /**
+     * Method that returns the customer's transport value.
+     *
+     * @param orderValue The value of the order.
+     * @return The transport value of the customer.
+     */
     @Override
     public double getTransportValue(double orderValue) {
-        return 20;
+        return this.transportValue;
     }
 
+    /**
+     * Method that returns a string representation of a Regular Customer.
+     *
+     * @return A string representation of a Regular Customer.
+     */
     @Override
     public String toString() {
         return "Regular customer: " + super.toString();
     }
 }
 
+/**
+ * Class that represents a Frequent Customer. A type of Customer.
+ *
+ * @author Eduardo Nunes
+ */
 class FrequentCustomer extends Customer implements Serializable {
+    /**
+     * Constructor of a {@link FrequentCustomer Frequent Customer}. This constructor simply calls the super constructor, and sets the default of the transport value of a {@link FrequentCustomer Frequent Customer}.
+     *
+     * @param name The name of the customer.
+     * @param address The address of the customer.
+     * @param email The email of the customer.
+     * @param phoneNumber The phone number of the customer.
+     * @param dateOfBirth The date of birth of the customer.
+     */
     public FrequentCustomer(String name, String address, String email, String phoneNumber, Date dateOfBirth) {
         super(name, address, email, phoneNumber, dateOfBirth);
     }
 
+    /**
+     * Method that calculates and sets the customer's transport value for a Frequent Customer based on his order value.
+     *
+     * @param orderValue The value of the order.
+     */
     private void calctransportValue(double orderValue) {
-        this.transportValue = orderValue > 40 ? 0.0 : 15.0;
+        this.transportValue = orderValue > 40 ? 0.0 : 15.0; // If the order value is greater than 40, the transport value is 0.0, otherwise, it is 15.0.
     }
 
+    /**
+     * Method that calculates and then returns the Frequent Customer's transport value.
+     *
+     * @param orderValue The value of the order.
+     * @return The transport value of the Frequent Customer.
+     */
     @Override
     public double getTransportValue(double orderValue) {
         calctransportValue(orderValue); //assign correct value to transportValue
         return this.transportValue;
     }
 
+    /**
+     * Method that returns a string representation of a Frequent Customer.
+     *
+     * @return A string representation of a Frequent Customer.
+     */
     @Override
     public String toString() {
         return "Frequent customer: " + super.toString();

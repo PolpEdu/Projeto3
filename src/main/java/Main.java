@@ -56,7 +56,7 @@ class Auth {
     private Date d;
 
     /**
-     * Constructor for the Auth class that initializes the customers {@link Customers} and prints the Authentication menu {@link Auth#welcome(Scanner)}.
+     * Constructor for the {@link Auth} class that initializes the customers {@link Customers} and prints the Authentication menu {@link Auth#welcome(Scanner)}.
      *
      * @param sc Scanner object to read inputs
      * @param products Products object that contains all products in the database

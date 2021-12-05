@@ -3,7 +3,7 @@ package main.java;
 import java.io.Serializable;
 
 /**
- * Class that represents a usual Product, this class extends into different types of products.
+ * Class that represents a usual Product, this class extends into different types of Products.
  *
  * @author Eduardo Nunes
  */
@@ -40,7 +40,7 @@ abstract class Product implements Serializable {
 
 
     /**
-     * Constructor of the class Product, it initializes the name, identifier, current stock, price per unit and total price of the product.
+     * Constructor of the class {@link Product}, it initializes the {@link #name}, {@link #identifier}, {@link #currentStock current stock}, {@link #pricePerUnit price per unit} and {@link #totalPrice total price of the product}.
      *
      * @param name Name of the product
      * @param identifier Identifier of the product (barcode)

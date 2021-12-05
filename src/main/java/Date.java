@@ -25,7 +25,7 @@ class Date implements Serializable {
     private int year;
 
     /**
-     * Constructor of the Date class, it checks if the given parameters form a valid date
+     * Constructor of the {@link Date} class, it checks if the given parameters form a valid date
      * and if they do, it sets the date.
      *
      * @throws IllegalArgumentException if the arguments of the date don't form a valid date
@@ -140,24 +140,24 @@ class Date implements Serializable {
      * @return true if the date is before the other date, false otherwise
      */
     public boolean isBefore(Date date) {
-        if (this.year < date.year) {
-            return true;
+        if (this.year < date.year) { // check if the year is before
+            return true; // the date is before
         }
-        else if (this.year == date.year) {
-            if (this.month < date.month) {
-                return true;
+        else if (this.year == date.year) { // check if the year is the same
+            if (this.month < date.month) { // check if the month is before
+                return true; // the date is before
             }
-            else if (this.month == date.month) {
-                if (this.day < date.day) {
-                    return true;
+            else if (this.month == date.month) { // check if the month is the same
+                if (this.day < date.day) { // check if the day is before
+                    return true; // the date is before
                 }
             }
         }
-        return false;
+        return false; // otherwise, the date is after
     }
 
     /**
-     * Check if the date is after another date
+     * Check if the date is after another date, by simply inverting {@link #isBefore(Date)} and {@link #equals(Date)}.
      *
      * @param date Date to compare
      * @return true if the date is after the other date, false otherwise

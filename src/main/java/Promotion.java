@@ -81,7 +81,7 @@ abstract class Promotion implements Serializable {
 }
 
 /**
- * Subclass that represents a type {@link Promotion} (Pay-three-take-Four) that is applicable to a {@link Order}.
+ * Subclass that represents a type {@link Promotion} (Pay-Three-Take-Four) that is applicable to a {@link Order}.
  */
 class PTTF extends Promotion implements Serializable {
 
@@ -131,7 +131,9 @@ class PTTF extends Promotion implements Serializable {
         return "Promotion(PTTF) - Promotion start: " + this.promotionStart + " Promotion end: " + this.promotionEnd;
     }
 }
-
+/**
+ * Subclass that represents a type {@link Promotion} (Pay-Less) that is applicable to a {@link Order}.
+ */
 class PL extends Promotion implements Serializable {
     /**
      * Constructor for the {@link PL} class, it initializes the promotion' start and end {@link Date dates}.

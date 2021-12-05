@@ -31,13 +31,15 @@ class LoggedIn{
     private Customer customer;
 
     /**
-     * The date the customer logged in
+     * The {@link Date} the customer logged in
      */
     private Date loggedDate;
 
     /**
      * Constructor for the {@link LoggedIn} class that assigns the object {@link Customer} to the one that logged in, along with the current {@link Date},
      * available {@link Products}, all {@link Customers} and {@link Promotions} and prints the {@link #menu(Scanner) LoggedIn menu}.
+     *
+     * @throws IOException if the file to read the customers from is not found
      *
      * @param loggedC the customer that is logged in to apply transport fees associated with the type of customer
      * @param logged Date the date that the customer logged in to check what promotions are available at that time
@@ -46,7 +48,7 @@ class LoggedIn{
      * @param apromo Promotions object to search for promotions and apply them
      * @param availableCustomers All customers object to update the customers file object
      */
-    public LoggedIn(Customer loggedC, Date logged, Products ap, Scanner sc, Promotions apromo, Customers availableCustomers) {
+    public LoggedIn(Customer loggedC, Date logged, Products ap, Scanner sc, Promotions apromo, Customers availableCustomers) throws IOException {
         //assign the parameters to the class variables
         this.customer = loggedC;
         this.loggedDate = logged;
@@ -71,9 +73,11 @@ class LoggedIn{
      *     <li>If he wants to Log out (exit to the previous menu)</li>
      * </ul>
      *
+     * @throws IOException if the file to read the customers from is not found
+     *
      * @param sc Scanner object to read inputs
      */
-    private void menu(Scanner sc) {
+    private void menu(Scanner sc) throws IOException {
         String choice; //the user's choice
         int choiceInt; //the user's choice as an integer
 
@@ -112,10 +116,12 @@ class LoggedIn{
     /**
      * Method that allows logged in customers to make an order.
      *
+     * @throws IOException if we cannot read/write the products file
+     *
      * @param sc Scanner object to read inputs
      * @return Order object with the order made
      */
-    private Order makeOrder(Scanner sc) {
+    private Order makeOrder(Scanner sc) throws IOException {
         System.out.println("Please enter the products you wish to order:");
 
         String choice; //the user's choice
@@ -213,7 +219,7 @@ abstract class Customer implements Serializable {
     private long phoneNumber;
 
     /**
-     * The customer's date of birth.
+     * The customer's {@link Date} of birth.
      */
     private Date dateOfBirth;
 
@@ -229,7 +235,7 @@ abstract class Customer implements Serializable {
 
     /**
      * Constructor of the class {@link Customer}, it initializes the {@link #name customer's name}, {@link #address}, {@link #email}, {@link #phoneNumber phone number}, {@link #dateOfBirth date of birth} and {@link #orders}.
-     * It is protected since it is only used by the subclasses, and the registration of a new customer is not implemented.
+     * It is protected since it is only used by the subclasses and the registration of new customers is not implemented.
      *
      * @throws IllegalArgumentException if the {@link #email customer's email} is invalid.
      * @throws IllegalArgumentException if the {@link #phoneNumber customer's phone number} is invalid.
@@ -241,7 +247,7 @@ abstract class Customer implements Serializable {
      * @param phoneNumber The customer's phone number.
      * @param dateOfBirth The customer's date of birth.
      */
-    protected Customer(String name, String address, String email, String phoneNumber, Date dateOfBirth) {
+    protected Customer(String name, String address, String email, String phoneNumber, Date dateOfBirth) throws IllegalArgumentException, NumberFormatException {
         this.name = name; // assign the name
         this.address = address; // assign the address
 
@@ -266,6 +272,10 @@ abstract class Customer implements Serializable {
         this.orders = new Orders(); // create a new empty orders object and assign it to the customer
     }
 
+    /**
+     * Constructor of the class {@link Customer}, it instead of giving the class variables as arguments, it receives a {@link Scanner} object in order to the user register a {@link Customer} itself.
+     * @param sc Scanner object used to read the user's inputs.
+     */
     @Deprecated
     protected Customer(Scanner sc) {
         // ask for data to create a customer
@@ -307,18 +317,11 @@ abstract class Customer implements Serializable {
         System.out.println("\nCustomer created successfully:\n" + this);
     }
 
-    @Deprecated
-    public Customer(Customer customer) { // doesn't check if the customer date is valid
-        this.name = customer.name;
-        this.address = customer.address;
-        this.email = customer.email;
-        this.phoneNumber = customer.phoneNumber;
-        this.dateOfBirth = customer.dateOfBirth;
-        this.orders = customer.orders;
-    }
 
     /**
      * Method that checks if the phone number is valid.
+     *
+     * @param phoneNumber The phone number to be checked.
      *
      * @return true if the phone number is valid, false otherwise.
      */

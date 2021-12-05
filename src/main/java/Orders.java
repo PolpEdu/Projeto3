@@ -30,7 +30,7 @@ class Orders implements Serializable {
     }
 
     /**
-     * Method toString of the class Orders.
+     * Method toString of the class {@link Orders}.
      *
      * @return String representation of a set of Orders.
      */
@@ -67,7 +67,7 @@ class Order implements Serializable {
      * The Order contains information such as:
      * <ul>
      *      <li>The products ordered in an array list with the Product type</li>
-     *      <li>The order date</li>
+     *      <li>The order {@link Date date}</li>
      *      <li>The customer that made the order</li>
      *      <li>All the prices that affected the price of the order:
      *          <ul>
@@ -79,9 +79,9 @@ class Order implements Serializable {
      * </ul>
      *
      * @param chosenProducts ArrayList of products ordered
-     * @param orderDate Date of the order
-     * @param orderedby Customer that made the order
-     * @param promotions Promotions to check if the order is eligible for a promotion
+     * @param orderDate {@link Date} of the order
+     * @param orderedby {@link Customer} that made the order
+     * @param promotions {@link Promotions} to check if the order is eligible for a promotion
      */
     public Order(ArrayList<Product> chosenProducts, Date orderDate, Customer orderedby, Promotions promotions) {
         this.chosenProducts = chosenProducts; // assign the products ordered to the chosenProducts array list

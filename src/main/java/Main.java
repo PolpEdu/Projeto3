@@ -10,9 +10,12 @@ import java.util.Scanner;
 public class Main {
     /**
      * Application starts here
+     *
+     * @throws Exception If we can't read/write to the files of our application
+     *
      * @param args Given in the command line
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         Scanner sc = new Scanner(System.in); // Scanner for user input
         Date now = new Date(5, 12, 2022); // Current date (change for testing)
@@ -58,12 +61,14 @@ class Auth {
     /**
      * Constructor for the {@link Auth} class that initializes the customers {@link Customers} and prints the Authentication menu {@link Auth#welcome(Scanner)}.
      *
+     * @throws Exception If we can't read/write to the files of our application
+     *
      * @param sc Scanner object to read inputs
      * @param products Products object that contains all products in the database
      * @param d Date object that contains the current date
      * @param promotions Promotions object that contains all promotions in the database
      */
-    public Auth(Scanner sc,Products products, Date d, Promotions promotions) {
+    public Auth(Scanner sc,Products products, Date d, Promotions promotions) throws Exception {
         this.cs = new Customers(); //initialize customers
         this.products = products; // assign the products given as parameter to the products object of the Auth object
         this.promotions = promotions; // assign the promotions given as parameter to the promotions object of the Auth object
@@ -80,9 +85,11 @@ class Auth {
      *     <li>If the user wants to exit</li>
      * </ul>
      *
+     * @throws Exception If we can't read/write to the files of our application
+     *
      * @param sc Scanner object to read inputs
      */
-    private void welcome(Scanner sc) {
+    private void welcome(Scanner sc) throws Exception {
         // welcome message
         System.out.println("\nWelcome to the Java SuperMarket Chain!\n" +
                 "Today's date is: "+ this.d+"\nPlease login to continue.\n");
@@ -119,11 +126,13 @@ class Auth {
 
     /**
      * Method that asks for login.
-     * <p>If the login was successful, creates a {@link LoggedIn Logged In Object} which contains the customer and date information</p>
+     * <p>If the login was successful, creates a {@link LoggedIn Logged In Object} which contains the customer and {@link Date date} information</p>
+     *
+     * @throws Exception If we can't read our customers from file
      *
      * @param sc Scanner object to read inputs
      */
-    private void login(Scanner sc) {
+    private void login(Scanner sc) throws Exception {
         System.out.print("Please login by entering your email: ");
 
         String email = sc.nextLine(); //ask for the next line

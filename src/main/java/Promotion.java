@@ -1,77 +1,110 @@
 package main.java;
-/*
-To increase sales, the company makes temporary discounts.
-Each discount is associated	with a single product.
-There are two types	of discounts: the pay-three-take-four and the pay-less.
-
-In the pay-three-take-four type, customers pay three out of	four items.
-For example, if a customer buys 9 units	of a product, he/she will only pay 7.
-
-In the pay-less type, the first unit is	paid at 100%, being the	cost decreased by 5% for each additional unit, until a maximum discount	of 50% is reached.
-
-Each order can have several	products.txt and in different quantities.
-For frequent customers,	delivery is	free for orders over 40 Euros. Below this value, delivery cost is 15 Euros.
-
-For other customers, the delivery cost is 20 Euros.
-Furniture products.txt weighing more than 15 kg have a delivery cost of 10 Euros.
-This cost is applicable	to all Customers.
- */
 
 import java.io.Serializable;
 
-
+/**
+ * Class that represents a default Promotion, this class extends into different types of Promotions.
+ * We need more than one type of Promotion since the price calculation of an {@link Order} is different for each type of Promotion.
+ *
+ * @author Eduardo Nunes
+ */
 abstract class Promotion implements Serializable {
+    /**
+     * The promotion' Start {@link Date}.
+     */
     protected Date promotionStart;
+
+    /**
+     * The promotion's End {@link Date}.
+     */
     protected Date promotionEnd;
 
-    protected Promotion(Date promotionStart, Date promotionEnd) {
-        this.promotionStart = promotionStart;
-        this.promotionEnd = promotionEnd;
+    /**
+     * Constructor for the {@link Promotion} class, it initializes the promotion' start and end {@link Date dates}.
+     * It is protected since it's only used by the subclasses,
+     *
+     * @param promotionStart the promotion' start {@link Date date}
+     * @param promotionEnd the promotion's end {@link Date date}
+     */
+    protected Promotion(Date promotionStart, Date promotionEnd) throws IllegalArgumentException {
+        this.promotionStart = promotionStart; //assign the promotion start date
+        this.promotionEnd = promotionEnd; //assign the promotion end date
     }
 
-    //used to calculate the full price to pay without any special promotions applied
+    /**
+     * Method that calculates the price of a given {@link Order} applicable to this {@link Promotion}.
+     * In this case, there is no special calculation for the price, so it just returns the {@link Order}'s price.
+     *
+     * @param order the {@link Order} that we want to calculate the price of
+     * @return the price of the {@link Order}
+     */
     public double calcPrice(Order order) {
-        double price = 0;
-        System.out.println("Calculating price without any special promotions applied");
-        for (Product p : order.getProducts()) {
-            price += p.getPrice();
-
-        }
-        return price;
+        return order.getDefaulttotalprice(); //return the total price
     }
 
-    //Check if a promotion is applicable
+    /**
+     * Method that checks if a Promotion is applicable given a certain Date
+     *
+     * @param d date
+     * @return true if the Promotion is applicable, false otherwise
+     */
     public boolean isApplicable(Date d) {
-        return (promotionStart.isBefore(d) && promotionEnd.isAfter(d));
+        return (promotionStart.isBefore(d) && promotionEnd.isAfter(d)); //check if the promotion start is before the date and the promotion end is after the date
     }
 
+    /**
+     * Method that returns the promotion's start {@link Date date}.
+     *
+     * @return the promotion's start {@link Date date}
+     */
     public Date getStartDate() {
         return this.promotionStart;
     }
 
+    /**
+     * Method that returns the promotion's end {@link Date date}.
+     *
+     * @return the promotion's end {@link Date date}
+     */
     public Date getEndDate() {
         return this.promotionEnd;
     }
 
-    //to string method
+    /**
+     * Method toString of the {@link Promotion} class.
+     *
+     * @return the String representation of the {@link Promotion}
+     */
     public String toString() {
         return "Promotion start: " + promotionStart + " Promotion end: " + promotionEnd;
     }
-
 }
 
-
+/**
+ * Subclass that represents a type {@link Promotion} (Pay-three-take-Four) that is applicable to a {@link Order}.
+ */
 class PTTF extends Promotion implements Serializable {
 
+    /**
+     * Constructor for the {@link PTTF Pay-Three-Take-Four} class, it initializes the promotion' start and end {@link Date dates}.
+     *
+     * @param promotionStart the promotion' start {@link Date date}
+     * @param promotionEnd   the promotion's end {@link Date date}
+     */
     public PTTF(Date promotionStart, Date promotionEnd) {
         super(promotionStart, promotionEnd);
     }
 
-    //calculate the price after applying the promotion
+    /**
+     * Method that calculates the price of a given {@link Order} applicable to {@link PTTF Pay-Three-Take-Four} {@link Promotion}.
+     *
+     * @param o order the {@link Order} that we want to calculate the price of
+     * @return the price of the {@link Order} with a {@link PTTF Pay-Three-Take-Four} {@link Promotion promotion} applied
+     */
     @Override
     public double calcPrice(Order o) {
         double total = 0;
-        double pprice ;
+        double pprice;
         int timesbought;
 
         //check for 4 ocorrences of a product in a order
@@ -79,8 +112,8 @@ class PTTF extends Promotion implements Serializable {
             pprice = p.getPrice();
             timesbought = o.getTimesbought(p);
 
-            for (int i = 1; i <= timesbought; i++) {
-                if (!(i % 4 == 0)) {
+            for (int i = 1; i <= timesbought; i++) { // loop for every time the product is bought
+                if (!(i % 4 == 0)) { //if its the fourth time bought a product, dont account for the price
                     total += pprice;
                 }
             }
@@ -88,19 +121,34 @@ class PTTF extends Promotion implements Serializable {
         return Math.round(total * 100.0) / 100.0;
     }
 
-    //to string method
+    /**
+     * Method toString of the {@link PTTF} class.
+     *
+     * @return the String representation of the Pay-Three-Take-Four {@link Promotion}.
+     */
     @Override
     public String toString() {
-        return "Promotion (PTTF) -start: " + this.promotionStart + " Promotion end: " + this.promotionEnd;
+        return "Promotion(PTTF) - Promotion start: " + this.promotionStart + " Promotion end: " + this.promotionEnd;
     }
 }
 
 class PL extends Promotion implements Serializable {
-
+    /**
+     * Constructor for the {@link PL} class, it initializes the promotion' start and end {@link Date dates}.
+     *
+     * @param promotionStart the promotion' start {@link Date date}
+     * @param promotionEnd   the promotion's end {@link Date date}
+     */
     public PL(Date promotionStart, Date promotionEnd) {
         super(promotionStart, promotionEnd);
     }
 
+    /**
+     * Method that calculates the price of a given {@link Order} applicable to {@link PL Pay-Less} {@link Promotion}.
+     *
+     * @param o order the {@link Order} that we want to calculate the price of
+     * @return the price of the {@link Order} with a {@link PL Pay-Less} {@link Promotion promotion} applied
+     */
     @Override
     public double calcPrice(Order o) {
         double discount = 1.05;
@@ -129,9 +177,14 @@ class PL extends Promotion implements Serializable {
         return Math.round(total * 100.0) / 100.0;
     }
 
+    /**
+     * Method toString of the {@link PL Pay-Less} class.
+     *
+     * @return the String representation of the {@link PL Pay-Less} {@link Promotion promotion}.
+     */
     @Override
     public String toString() {
-        return "Promotion (PL) -start: " + this.promotionStart + " Promotion end: " + this.promotionEnd;
+        return "Promotion(PL) - Promotion start: " + this.promotionStart + " Promotion end: " + this.promotionEnd;
     }
 }
 

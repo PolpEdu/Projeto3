@@ -84,7 +84,7 @@ class Date implements Serializable {
     }
 
     /**
-     * Checks if the given date is valid.
+     * Checks if the given {@link Date} is valid.
      *
      * @param day Day of the month
      * @param month Month of the year

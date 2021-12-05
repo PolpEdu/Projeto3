@@ -1,7 +1,5 @@
 package main.java;
 
-import jdk.jfr.Experimental;
-
 import java.io.*;
 import java.util.ArrayList;
 
@@ -39,8 +37,12 @@ class Customers implements Serializable {
 
     /**
      * Constructor of the {@link Customers} class that loads the customers from the files.
+     *
+     * @throws IOException If we can't read the file.
+     * @throws ClassNotFoundException If we can't find the class that we are trying to load.
+     *
      */
-    public Customers() {
+    public Customers() throws IOException, ClassNotFoundException {
         clients = new ArrayList<>(); //empty list
         loadcustomers(); //load customers from file
     }
@@ -48,13 +50,15 @@ class Customers implements Serializable {
     /**
      * Method that loads the {@link Customers} from the files.
      *
-     * @throws IOException
      *
      * It checks if the .obj file exists and if it does, it loads the customers from it.
      * If it doesn't, it loads the customers from the default .txt file.
      *
+     * @throws IOException If we can't read the file.
+     * @throws ClassNotFoundException If we can't find the class that we are trying to load.
+     *
      */
-    private void loadcustomers() {
+    private void loadcustomers() throws IOException, ClassNotFoundException {
         if (f.exists() && f.isFile()) { //if the file exists
             loadcustomersOBJ(); //load customers from obj file
         }
@@ -66,12 +70,12 @@ class Customers implements Serializable {
     /**
      * Method that loads the {@link Customers} from the default .txt file.
      *
-     * @throws ArrayIndexOutOfBoundsException
-     * @throws FileNotFoundException
-     * @throws IOException
+     * @throws ArrayIndexOutOfBoundsException In case we try to access an index that contains data that doesn't exist.
+     * @throws FileNotFoundException If we can't find the file.
+     * @throws IOException If we can't read the file.
      *
      */
-    private void loadcustomerstxt() {
+    private void loadcustomerstxt() throws ArrayIndexOutOfBoundsException, FileNotFoundException, IOException {
         if(t.exists() && t.isFile()) { //check if the file exists to prevent errors
             try {
                 FileReader fr = new FileReader(t);
@@ -86,7 +90,7 @@ class Customers implements Serializable {
 
                         Date date = new Date(Integer.parseInt(arrOfStr2[0]), Integer.parseInt(arrOfStr2[1]), Integer.parseInt(arrOfStr2[2])); //create a new date object
 
-                        Customer c;
+                        Customer c; //customer that will be created
                         if (arrOfStr[0].equals("F")) {
                             c = new FrequentCustomer(arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4], date); // create a new Frequent Customer object if the first element is F
                         } else if (arrOfStr[0].equals("R")) {
@@ -132,13 +136,13 @@ class Customers implements Serializable {
     }
 
     /**
-     * Method that loads the {@link Customers} from the .obj file and assigns them to the current list.
+     * Method that loads the {@link Customers} from the .obj file and assigns them to the current {@link #clients list of customers}.
      *
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @throws FileNotFoundException If we can't find the file.
+     * @throws IOException If we can't read the file.
+     * @throws ClassNotFoundException If we can't find the class that we are trying to load.
      */
-    private void loadcustomersOBJ(){
+    private void loadcustomersOBJ() throws FileNotFoundException, IOException, ClassNotFoundException {
         if (f.isFile()) { //check if the file exists to prevent errors
             try {
                 FileInputStream fis = new FileInputStream(f);
@@ -166,17 +170,17 @@ class Customers implements Serializable {
     /**
      * Method that saves the current {@link Customers} into to the .obj file.
      *
-     * @throws FileNotFoundException
-     * @throws IOException
+     * @throws FileNotFoundException If we can't find the file.
+     * @throws IOException If we can't write to the file.
      *
      */
-    public void savecustomersOBJ() {
+    public void savecustomersOBJ() throws FileNotFoundException, IOException {
         try {
             FileOutputStream fos = new FileOutputStream(f);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-            oos.writeObject(this);
-            //System.out.println("Saved!");
+            oos.writeObject(this); //write this class to the file
+            //? System.out.println("Saved!");
 
             //close the streams
             oos.close();
@@ -232,7 +236,7 @@ class Customers implements Serializable {
     /**
      * Method that adds a {@link Customer} to the {@link #clients customers} list.
      *
-     * @param c Customer to be added.
+     * @param c {@link Customer} to be added.
      */
     public void addCustomer(Customer c) {
         if (!checkExists(c)){
@@ -243,24 +247,35 @@ class Customers implements Serializable {
         }
     }
 
+    /**
+     * Method that tries to find a {@link Customer} by email. Used in the {@link Auth#login(Scanner) login} method.
+     *
+     * @param email Email of the {@link Customer} to be found.
+     *
+     * @return {@link Customer} if found, null otherwise.
+     */
     protected Customer getCustomer(String email) {
-        for(Customer c : this.clients) {
-            if(c.getEmail().equals(email)) {
-                return c;
+        for(Customer c : this.clients) { //loop in all customers
+            if(c.getEmail().equals(email)) { //check if the email is the same
+                return c; //if it is, return the customer
             }
         }
-        return null;
+        return null; //if it loops through the client list and doesn't find the email, return null
     }
 
 
-    //Print all clients
+    /**
+     * Method toString of the class {@link Customers}.
+     *
+     * @return String representation of all the Customers.
+     */
     @Override
     public String toString() {
         String s = "";
-        for(Customer c : clients) {
-            s += c.toString()+"\n";
+        for(Customer c : clients) { //Loop in all customers
+            s += c.toString()+"\n"; //add the customer to the string
         }
-        return s;
+        return s; //return the built string
     }
 }
 

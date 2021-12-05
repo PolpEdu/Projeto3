@@ -57,6 +57,7 @@ abstract class Product implements Serializable {
 
     /**
      * Method that updates the current stock of the product by removing the quantity of the product that was ordered in the {@link #currentStock} variable.
+     * Usually called by {@link Products#removeProducts} method to remove one from the stock
      *
      * @param nr Number of units to be removed from the current stock
      */

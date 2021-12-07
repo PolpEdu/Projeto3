@@ -398,7 +398,7 @@ abstract class Customer implements Serializable {
 }
 
 /**
- * Class that represents a Regular Customer. A type of Customer.
+ * Subclass that represents a Regular Customer. A type of Customer.
  *
  * @author Eduardo Nunes
  */
@@ -446,7 +446,7 @@ class RegularCustomer extends Customer implements Serializable {
 }
 
 /**
- * Class that represents a Frequent Customer. A type of Customer.
+ * Subclass that represents a Frequent Customer. A type of Customer.
  *
  * @author Eduardo Nunes
  */

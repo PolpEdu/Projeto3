@@ -122,7 +122,7 @@ abstract class Product implements Serializable {
 }
 
 /**
- * Class that represents a product associated with Food. This class contains specific attributes of a product associated with Food.
+ * Subclass that represents a product associated with Food. This class contains specific attributes of a product associated with Food.
  *
  * @author Eduardo Nunes
  */
@@ -172,7 +172,7 @@ class FoodProduct extends Product implements Serializable{
 }
 
 /**
- * Class that represents a product associated with Cleaning. This class has a specific attribute associated with Cleaning.
+ * Subclass that represents a product associated with Cleaning. This class has a specific attribute associated with Cleaning.
  *
  * @author Eduardo Nunes
  */
@@ -226,7 +226,7 @@ class CleaningProduct extends Product implements Serializable {
 }
 
 /**
- * Class that represents a product associated with Furniture. This class contains the specific attributes of a product associated with Furniture.
+ * Subclass that represents a product associated with Furniture. This class contains the specific attributes of a product associated with Furniture.
  *
  * @author Eduardo Nunes
  */

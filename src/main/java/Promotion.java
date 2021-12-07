@@ -107,13 +107,13 @@ class PTTF extends Promotion implements Serializable {
         double pprice;
         int timesbought;
 
-        //check for 4 ocorrences of a product in a order
+        //check for 4 ocorrences of a product in an order
         for (Product p : o.getProductNames()) {
             pprice = p.getPrice();
             timesbought = o.getTimesbought(p);
 
             for (int i = 1; i <= timesbought; i++) { // loop for every time the product is bought
-                if (!(i % 4 == 0)) { //if its the fourth time bought a product, dont account for the price
+                if (!(i % 4 == 0)) { //if it's the fourth time bought a product, don't account for the price
                     total += pprice;
                 }
             }

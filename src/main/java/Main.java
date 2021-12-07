@@ -4,6 +4,7 @@ import java.util.Scanner;
 /**
  * Main class that runs the application and initializes the default objects,
  * such as initial {@link Auth Authentication Menu}, {@link Products}, {@link Promotions}, current time (by a class {@link Date}) and {@link Scanner} to read inputs.
+ * It also contains the main loop that keeps the application running until the user decides to exit.
  *
  * @author Eduardo Nunes
  */
@@ -18,7 +19,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         Scanner sc = new Scanner(System.in); // Scanner for user input
-        Date now = new Date(5, 12, 2022); // Current date (change for testing)
+        Date now = new Date(21, 12, 2022); // Current date (change for testing)
 
         // loop where the application runs
         while (true) { // Loop until user from inside the loop
@@ -91,7 +92,7 @@ class Auth {
      */
     private void welcome(Scanner sc) throws Exception {
         // welcome message
-        System.out.println("\nWelcome to the Java SuperMarket Chain!\n" +
+        System.out.println("Welcome to the Java SuperMarket Chain!\n" +
                 "Today's date is: "+ this.d+"\nPlease login to continue.\n");
 
         System.out.print("1 - Login\n2 - Exit\nInput: ");
@@ -113,7 +114,7 @@ class Auth {
                     login(sc);
                     break;
                 case 2: // if the user wants to exit
-                    System.out.println("\n\nThank you for using the Java SuperMarket Chain!"); //inform the user that the application is closing
+                    System.out.println("\n\n\nThank you for using the Java SuperMarket Chain!"); //inform the user that the application is closing
                     sc.close(); // close the scanner
                     System.exit(0); // exit the application
                 default: // if the user input is not valid

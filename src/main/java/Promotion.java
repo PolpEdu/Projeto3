@@ -109,12 +109,12 @@ class PTTF extends Promotion implements Serializable {
 
         //check for 4 ocorrences of a product in an order
         for (Product p : o.getProductNames()) {
-            pprice = p.getPrice();
-            timesbought = o.getTimesbought(p);
+            pprice = p.getPrice(); //get the product's price
+            timesbought = o.getTimesbought(p); //get the number of times the product was bought in the order
 
             for (int i = 1; i <= timesbought; i++) { // loop for every time the product is bought
                 if (!(i % 4 == 0)) { //if it's the fourth time bought a product, don't account for the price
-                    total += pprice;
+                    total += pprice; //add the price to the total
                 }
             }
         }
@@ -153,26 +153,26 @@ class PL extends Promotion implements Serializable {
      */
     @Override
     public double calcPrice(Order o) {
-        double discount = 1.05;
+        double pricetopay = 1.05;
         double total = 0;
         int timesbought;
 
-        for (Product p : o.getProductNames()) {
-            timesbought = o.getTimesbought(p);
-            if(timesbought > 1) {
-                while (timesbought > 0) {
-                    if (discount > 0.5) {
-                        discount -= 0.05;
-                        discount = Math.round(discount * 100.0) / 100.0;
+        for (Product p : o.getProductNames()) { //loop for every product name
+            timesbought = o.getTimesbought(p); //get the number of times the product was bought in the order
+            if(timesbought > 1) { //if the product was bought more than once we can apply this type of discount
+                while (timesbought > 0) {  //loop for every time the product was bought
+                    if (pricetopay > 0.5) { //if the discount is greater than 0.5 we can subtract to the price to pay
+                        pricetopay -= 0.05; //apply the discount
+                        pricetopay = Math.round(pricetopay * 100.0) / 100.0; //round the price to pay
                     }
-                    timesbought--;
-                    total += p.getPrice() * discount*100.0/100.0;
-                    System.out.println("Incremented in total: " + total);
+                    timesbought--; //decrease the number of times the product was bought
+                    total += p.getPrice() * pricetopay*100.0/100.0; //add the price to the total
+                    // System.out.println("Incremented in total: " + total);
                 }
             }
             else {
                 //if the product is bought only once, the discount is not applied
-                total += p.getPrice()* timesbought;
+                total += p.getPrice()* timesbought; //simply add the price of the product to the total
             }
         }
         //round total * discount with 2 decimals and return it

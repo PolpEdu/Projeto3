@@ -10,7 +10,8 @@ import java.util.Scanner;
  */
 public class Main {
     /**
-     * Application starts here
+     * Application Main Loop starts here. It initializes the default objects and asks the user for his credentials.
+     * If the user decides to logout, the loop restarts and asks for credentials again.
      *
      * @throws Exception If we can't read/write to the files of our application
      *
@@ -28,6 +29,7 @@ public class Main {
 
 
             new Auth(sc,products,now,promotions);  //Interface for login
+            //if the user decides to Logout, we will return to the top of the loop and ask for a new login credentials
         }
     }
 }

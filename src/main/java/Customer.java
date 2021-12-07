@@ -273,7 +273,7 @@ abstract class Customer implements Serializable {
     }
 
     /**
-     * Constructor of the class {@link Customer}, it instead of giving the class variables as arguments, it receives a {@link Scanner} object in order to the user register a {@link Customer} itself.
+     * Constructor of the class {@link Customer}, it instead of giving the class variables as arguments, it receives a {@link Scanner} object in order to the user register a {@link Customer} himself.
      * @param sc Scanner object used to read the user's inputs.
      */
     @Deprecated

@@ -1,0 +1,10 @@
+R;Eduardo Fixe;Rua Quinta Rua;ee@gmail.com;981791794;25/2/2004
+F;Rodrigo;Rua Sexta Rua;rodas@gmail.com;916574892;11/8/2004
+R;Lucas Tolinho;Rua da Sofia;lucasSUPERDOIDO@gmail.com;913456781;30/10/2004
+R;António Santo;Rua da Rua;AntonioRuaRua@gmail.com;945678902;1/3/1949
+R;Rerduardo;Rua a Ultima;OultimoRerduardo@gmail.com;981291719;25/2/2004
+F;Eduardo Nunes;Rua Aquilino Ribeiro;edujgnunes@gmail.com;918279498;21/1/2002
+F;Afonso Melo;Rua Afonso Melo;afonsomelo@gmail.com;969231112;9/9/2002
+R;Lucas Anjo;Rua da Esquerda;lucas012roblox@gmail.com;987654321;1/5/2003
+F;Vasco Gouveia;Rua da Direita;vascodoido@gmail.com;988765432;25/12/2002
+F;Lucas Anjo dois;Rua do Meio;lucas022roblox@gmail.com;923456789;1/1/1960
